@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的项目</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #fff;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .card-badge {
+            display: inline-block;
+            background: #667eea;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
+
+        .card.disabled .card-badge {
+            background: #ccc;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>我的项目</h1>
+            <p>欢迎访问我的项目集合</p>
+        </div>
+
+        <div class="cards">
+            <a href="course-assistant.html" class="card">
+                <div class="card-icon">📚</div>
+                <div class="card-title">AI课程助手</div>
+                <div class="card-description">基于AI的智能课程学习助手，支持教材上传、题目解析、提示批改等功能</div>
+                <span class="card-badge">可用</span>
+            </a>
+
+            <a href="review.html" class="card">
+                <div class="card-icon">📝</div>
+                <div class="card-title">问题回顾</div>
+                <div class="card-description">查看和回顾历史问题记录，标记重点题目，巩固学习成果</div>
+                <span class="card-badge">可用</span>
+            </a>
+
+            <a href="future.md" class="card">
+                <div class="card-icon">🚧</div>
+                <div class="card-title">敬请期待</div>
+                <div class="card-description">更多精彩功能正在开发中，敬请期待...</div>
+                <span class="card-badge">开发中</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

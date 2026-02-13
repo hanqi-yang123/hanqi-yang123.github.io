@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问题回顾 - AI课程学习助手</title>
+    <!-- KaTeX库用于渲染LaTeX公式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .back-btn {
+            padding: 8px 16px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: #34495e;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .filter-btn.active {
+            background: #e67e22;
+        }
+
+        .filter-btn:hover {
+            background: #3d566e;
+        }
+
+        .filter-btn.active:hover {
+            background: #d35400;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* 左侧问题列表 */
+        .question-list {
+            width: 400px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            flex-shrink: 0;
+            max-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .list-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .question-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f3f4;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .question-item:hover {
+            background: #f8f9fa;
+        }
+
+        .question-item.active {
+            background: #e3f2fd;
+            border-left: 3px solid #3498db;
+        }
+
+        .question-item.marked {
+            background: #fff8e1;
+        }
+
+        .question-item.active.marked {
+            background: #fff3cd;
+        }
+
+        .question-checkbox {
+            margin-top: 3px;
+        }
+
+        .question-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .question-summary {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .question-meta {
+            font-size: 12px;
+            color: #6c757d;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .question-action-tag {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .tag-hint { background: #f39c12; color: #fff; }
+        .tag-correct { background: #e74c3c; color: #fff; }
+        .tag-generate { background: #9b59b6; color: #fff; }
+        .tag-ask { background: #3498db; color: #fff; }
+
+        .mark-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        .mark-btn:hover {
+            color: #f39c12;
+        }
+
+        .mark-btn.marked {
+            color: #f39c12;
+        }
+
+        .empty-list {
+            padding: 40px 20px;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        /* 文件夹样式 */
+        .folder-section {
+            margin-bottom: 10px;
+        }
+
+        .folder-header {
+            padding: 10px 15px;
+            background: #e9ecef;
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* 右侧详情区域 */
+        .detail-area {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 120px);
+        }
+
+        .detail-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-header h3 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .detail-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-hint {
+            background: #f39c12;
+            color: #fff;
+        }
+
+        .btn-hint:hover:not(:disabled) {
+            background: #e67e22;
+        }
+
+        .btn-explain {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .btn-explain:hover:not(:disabled) {
+            background: #219a52;
+        }
+
+        .btn-generate {
+            background: #9b59b6;
+            color: #fff;
+        }
+
+        .btn-generate:hover:not(:disabled) {
+            background: #8e44ad;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-delete:hover:not(:disabled) {
+            background: #c0392b;
+        }
+
+        .detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .detail-section {
+            margin-bottom: 25px;
+        }
+
+        .detail-section h4 {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .detail-question {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .detail-question img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .detail-answer {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .ai-response {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .ai-response h4 {
+            color: #27ae60;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .empty-detail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6c757d;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-detail p {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            gap: 4px;
+            padding: 10px;
+            justify-content: center;
+        }
+
+        .loading span {
+            width: 8px;
+            height: 8px;
+            background: #3498db;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading span:nth-child(1) { animation-delay: -0.32s; }
+        .loading span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Markdown和LaTeX样式 */
+        .detail-answer h1, .detail-answer h2, .detail-answer h3,
+        .ai-response h1, .ai-response h2, .ai-response h3 {
+            margin: 15px 0 10px 0;
+        }
+
+        .detail-answer ul, .detail-answer ol,
+        .ai-response ul, .ai-response ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .detail-answer pre, .ai-response pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .detail-answer code, .ai-response code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .katex-block {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .katex {
+            font-size: 1.1em;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .question-list {
+                width: 100%;
+                max-height: 300px;
+            }
+
+            .detail-area {
+                max-height: none;
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>问题回顾</h1>
+        <div class="header-actions">
+            <button class="filter-btn" id="filterAll" onclick="setFilter('all')">全部</button>
+            <button class="filter-btn" id="filterMarked" onclick="setFilter('marked')">已标记</button>
+            <a href="course-assistant.html" class="back-btn">返回学习</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 左侧问题列表 -->
+        <div class="question-list">
+            <div class="list-header" id="listHeader">
+                共 0 条记录
+            </div>
+            <div class="list-content" id="questionList">
+                <div class="empty-list">暂无问题记录</div>
+            </div>
+        </div>
+
+        <!-- 右侧详情区域 -->
+        <div class="detail-area">
+            <div class="detail-header">
+                <h3>问题详情</h3>
+                <div class="detail-actions">
+                    <button class="action-btn btn-hint" onclick="performAction('hint')" id="btnHint" disabled>提示</button>
+                    <button class="action-btn btn-explain" onclick="performAction('explain')" id="btnExplain" disabled>详解</button>
+                    <button class="action-btn btn-generate" onclick="performAction('generate')" id="btnGenerate" disabled>生题</button>
+                    <button class="action-btn btn-delete" onclick="deleteSelected()" id="btnDelete" disabled>删除</button>
+                </div>
+            </div>
+            <div class="detail-content" id="detailContent">
+                <div class="empty-detail">
+                    <p>请从左侧选择一个问题查看详情</p>
+                    <p>点击星标可标记重点/错题</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API配置
+        const API_KEY = 'ms-95e9fbc7-e55d-4d1f-927a-c9d33fe73a78';
+        const API_URL = 'https://api-inference.modelscope.cn/v1/chat/completions';
+
+        // 应用状态
+        let state = {
+            records: [],
+            selectedId: null,
+            filter: 'all',
+            isLoading: false,
+            aiResponses: {}  // 存储AI回复
+        };
+
+        // 初始化
+        function init() {
+            loadRecords();
+            renderList();
+            setFilter('all');
+        }
+
+        // 加载问题记录
+        function loadRecords() {
+            const saved = localStorage.getItem('questionRecords');
+            if (saved) {
+                state.records = JSON.parse(saved);
+            }
+        }
+
+        // 保存问题记录
+        function saveRecords() {
+            localStorage.setItem('questionRecords', JSON.stringify(state.records));
+        }
+
+        // 设置过滤器
+        function setFilter(filter) {
+            state.filter = filter;
+            document.getElementById('filterAll').classList.toggle('active', filter === 'all');
+            document.getElementById('filterMarked').classList.toggle('active', filter === 'marked');
+            renderList();
+        }
+
+        // 获取过滤后的记录
+        function getFilteredRecords() {
+            let filtered = state.records;
+            if (state.filter === 'marked') {
+                filtered = filtered.filter(r => r.isMarked);
+            }
+            return filtered;
+        }
+
+        // 按文件夹分组记录
+        function getGroupedRecords() {
+            const filtered = getFilteredRecords();
+            const groups = {};
+            
+            filtered.forEach(record => {
+                const folderName = record.folderName || '未分类';
+                if (!groups[folderName]) {
+                    groups[folderName] = [];
+                }
+                groups[folderName].push(record);
+            });
+            
+            return groups;
+        }
+
+        // 渲染问题列表
+        function renderList() {
+            const listContent = document.getElementById('questionList');
+            const listHeader = document.getElementById('listHeader');
+            const filtered = getFilteredRecords();
+            const grouped = getGroupedRecords();
+
+            listHeader.textContent = `共 ${filtered.length} 条记录`;
+
+            if (filtered.length === 0) {
+                listContent.innerHTML = '<div class="empty-list">暂无问题记录</div>';
+                return;
+            }
+
+            let html = '';
+            const folderNames = Object.keys(grouped);
+            
+            folderNames.forEach(folderName => {
+                const records = grouped[folderName];
+                html += `
+                    <div class="folder-section">
+                        <div class="folder-header">${escapeHtml(folderName)} (${records.length})</div>
+                        ${records.map(record => {
+                            const actionTag = getActionTag(record.action);
+                            const date = new Date(record.createdAt).toLocaleDateString('zh-CN');
+                            return `
+                                <div class="question-item ${record.id === state.selectedId ? 'active' : ''} ${record.isMarked ? 'marked' : ''}" 
+                                     onclick="selectQuestion('${record.id}')">
+                                    <div class="question-info">
+                                        <div class="question-summary">${escapeHtml(record.summary)}</div>
+                                        <div class="question-meta">
+                                            <span class="question-action-tag ${actionTag.class}">${actionTag.text}</span>
+                                            <span>${date}</span>
+                                        </div>
+                                    </div>
+                                    <button class="mark-btn ${record.isMarked ? 'marked' : ''}" 
+                                            onclick="event.stopPropagation(); toggleMark('${record.id}')">
+                                        ${record.isMarked ? '★' : '☆'}
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            });
+
+            listContent.innerHTML = html;
+        }
+
+        // 获取操作标签
+        function getActionTag(action) {
+            const tags = {
+                'hint': { text: '提示', class: 'tag-hint' },
+                'correct': { text: '批改', class: 'tag-correct' },
+                'generate': { text: '生题', class: 'tag-generate' },
+                'ask': { text: '自由问', class: 'tag-ask' }
+            };
+            return tags[action] || tags['ask'];
+        }
+
+        // 选择问题
+        function selectQuestion(id) {
+            state.selectedId = id;
+            renderList();
+            renderDetail();
+            updateButtons();
+        }
+
+        // 切换标记
+        function toggleMark(id) {
+            const record = state.records.find(r => r.id === id);
+            if (record) {
+                record.isMarked = !record.isMarked;
+                saveRecords();
+                renderList();
+            }
+        }
+
+        // 更新按钮状态
+        function updateButtons() {
+            const hasSelection = state.selectedId !== null;
+            document.getElementById('btnHint').disabled = !hasSelection || state.isLoading;
+            document.getElementById('btnExplain').disabled = !hasSelection || state.isLoading;
+            document.getElementById('btnGenerate').disabled = !hasSelection || state.isLoading;
+            document.getElementById('btnDelete').disabled = !hasSelection || state.isLoading;
+        }
+
+        // 渲染详情
+        function renderDetail() {
+            const detailContent = document.getElementById('detailContent');
+            const record = state.records.find(r => r.id === state.selectedId);
+
+            if (!record) {
+                detailContent.innerHTML = `
+                    <div class="empty-detail">
+                        <p>请从左侧选择一个问题查看详情</p>
+                        <p>点击星标可标记重点/错题</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="detail-section">
+                    <h4>问题内容</h4>
+                    <div class="detail-question">
+                        ${escapeHtml(record.question) || ''}
+                        ${record.image ? `<img src="${record.image}" alt="问题图片">` : ''}
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h4>原始回答</h4>
+                    <div class="detail-answer">${renderMarkdown(record.answer)}</div>
+                </div>
+            `;
+
+            // 显示AI回复（如果有）
+            const aiResponse = state.aiResponses[record.id];
+            if (aiResponse) {
+                html += `
+                    <div class="ai-response">
+                        <h4>${aiResponse.type}</h4>
+                        <div>${renderMarkdown(aiResponse.content)}</div>
+                    </div>
+                `;
+            }
+
+            detailContent.innerHTML = html;
+            
+            // 渲染LaTeX
+            renderLatex(detailContent);
+        }
+
+        // 执行操作
+        async function performAction(action) {
+            const record = state.records.find(r => r.id === state.selectedId);
+            if (!record || state.isLoading) return;
+
+            state.isLoading = true;
+            updateButtons();
+
+            // 显示加载状态
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML += `
+                <div class="ai-response" id="loadingResponse">
+                    <h4>正在生成...</h4>
+                    <div class="loading">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+
+            // 构建提示词
+            let prompt = '';
+            let responseType = '';
+            
+            switch (action) {
+                case 'hint':
+                    responseType = '解题提示';
+                    prompt = `请针对以下问题给出解题提示和思路，但不要直接给出答案：
+
+问题：${record.question || '请看图片中的问题'}
+
+请给出：
+1. 关键知识点
+2. 解题思路步骤
+3. 需要注意的地方`;
+                    break;
+                case 'explain':
+                    responseType = '详细解答';
+                    prompt = `请详细解答以下问题，给出完整的解题过程：
+
+问题：${record.question || '请看图片中的问题'}
+
+请给出：
+1. 题目分析
+2. 详细解题步骤
+3. 最终答案
+4. 相关知识点总结`;
+                    break;
+                case 'generate':
+                    responseType = '类似练习题';
+                    prompt = `请根据以下问题，生成2-3道类似的练习题：
+
+原问题：${record.question || '请看图片中的问题'}
+
+请生成：
+1. 同类型、相似难度的题目
+2. 覆盖相同的知识点
+3. 适当变换数值或情境
+4. 在最后给出参考答案`;
+                    break;
+            }
+
+            // 构建消息
+            const userContent = [];
+            if (record.image) {
+                userContent.push({
+                    type: 'image_url',
+                    image_url: { url: record.image }
+                });
+            }
+            userContent.push({
+                type: 'text',
+                text: prompt
+            });
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + API_KEY
+                    },
+                    body: JSON.stringify({
+                        model: 'Qwen/Qwen3-VL-30B-A3B-Instruct',
+                        messages: [
+                            { role: 'user', content: userContent }
+                        ],
+                        max_tokens: 16384,
+                        temperature: 0.7,
+                        enable_thinking: false
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiText = data.choices[0].message.content;
+
+                // 保存AI回复
+                state.aiResponses[record.id] = {
+                    type: responseType,
+                    content: aiText
+                };
+
+            } catch (error) {
+                console.error('API调用失败:', error);
+                state.aiResponses[record.id] = {
+                    type: '错误',
+                    content: '请求失败，请检查网络连接后重试。\n\n错误信息：' + error.message
+                };
+            }
+
+            state.isLoading = false;
+            updateButtons();
+            renderDetail();
+        }
+
+        // 删除选中的问题
+        function deleteSelected() {
+            if (!state.selectedId) return;
+            
+            if (!confirm('确定要删除这条记录吗？')) return;
+
+            state.records = state.records.filter(r => r.id !== state.selectedId);
+            delete state.aiResponses[state.selectedId];
+            state.selectedId = null;
+            
+            saveRecords();
+            renderList();
+            renderDetail();
+            updateButtons();
+        }
+
+        // 工具函数：HTML转义
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 简单的Markdown渲染（保留LaTeX公式）
+        function renderMarkdown(text) {
+            if (!text) return '';
+            
+            // 先保护LaTeX公式
+            const latexBlocks = [];
+            const latexInlines = [];
+            
+            text = text.replace(/\$\$([\s\S]+?)\$\$/g, (match, p1) => {
+                latexBlocks.push(p1);
+                return `%%LATEX_BLOCK_${latexBlocks.length - 1}%%`;
+            });
+            
+            text = text.replace(/\$([^\$\n]+?)\$/g, (match, p1) => {
+                latexInlines.push(p1);
+                return `%%LATEX_INLINE_${latexInlines.length - 1}%%`;
+            });
+            
+            text = text.replace(/\\\[([\s\S]+?)\\\]/g, (match, p1) => {
+                latexBlocks.push(p1);
+                return `%%LATEX_BLOCK_${latexBlocks.length - 1}%%`;
+            });
+            
+            text = text.replace(/\\\(([\s\S]+?)\\\)/g, (match, p1) => {
+                latexInlines.push(p1);
+                return `%%LATEX_INLINE_${latexInlines.length - 1}%%`;
+            });
+            
+            let html = escapeHtml(text);
+            
+            // 代码块
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // 标题
+            html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+            
+            // 粗体和斜体
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            
+            // 列表
+            html = html.replace(/^\- (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>');
+            
+            // 换行
+            html = html.replace(/\n/g, '<br>');
+            
+            // 恢复LaTeX公式
+            latexBlocks.forEach((latex, i) => {
+                html = html.replace(`%%LATEX_BLOCK_${i}%%`, `<div class="katex-block">$$${latex}$$</div>`);
+            });
+            
+            latexInlines.forEach((latex, i) => {
+                html = html.replace(`%%LATEX_INLINE_${i}%%`, `$${latex}$`);
+            });
+            
+            return html;
+        }
+        
+        // 渲染LaTeX公式
+        function renderLatex(element) {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(element, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false,
+                    output: 'html'
+                });
+            }
+        }
+
+        // 初始化应用
+        init();
+    </script>
+</body>
+</html>

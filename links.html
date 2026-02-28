@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>链接 - 西北老汉的个人主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 65px;
+        }
+        .nav-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s;
+        }
+        .nav-logo:hover { transform: scale(1.05); }
+        .nav-logo i { font-size: 24px; }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .hamburger {
+            display: none;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 10px 12px;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+        .hamburger:hover { background: rgba(255,255,255,0.3); }
+        .page-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .content-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            animation: fadeInUp 0.6s ease;
+        }
+        .content-card h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, #667eea 0%, #764ba2 50%, transparent 100%) 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .content-card h1 i { font-size: 36px; }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .link-card {
+            display: block;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+            border-radius: 16px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .link-card:hover::before { transform: scaleX(1); }
+        .link-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+        .link-card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .link-card-icon i {
+            font-size: 22px;
+            color: #fff;
+        }
+        .link-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .link-card-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #888;
+            font-size: 14px;
+            background: linear-gradient(180deg, transparent 0%, rgba(102,126,234,0.05) 100%);
+        }
+        .footer i { color: #667eea; margin: 0 3px; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; align-items: center; justify-content: center; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 65px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                flex-direction: column;
+                padding: 15px;
+                gap: 8px;
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            }
+            .nav-links.show { display: flex; }
+            .nav-links a { padding: 14px 20px; border-radius: 12px; }
+            .content-card { padding: 25px; border-radius: 16px; }
+            .content-card h1 { font-size: 24px; margin-bottom: 20px; }
+            .content-card h1 i { font-size: 28px; }
+            .link-grid { grid-template-columns: 1fr; gap: 15px; }
+            .link-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><i class="fas fa-code"></i> 西北老汉的个人主页</a>
+            <button class="hamburger" onclick="toggleNav()" aria-label="菜单"><i class="fas fa-bars"></i></button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html"><i class="fas fa-home"></i> 首页</a></li>
+                <li><a href="study.html"><i class="fas fa-book"></i> 学习</a></li>
+                <li><a href="essay.html"><i class="fas fa-feather-alt"></i> 随笔</a></li>
+                <li><a href="apps.html"><i class="fas fa-rocket"></i> 应用</a></li>
+                <li><a href="links.html" class="active"><i class="fas fa-link"></i> 链接</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="content-card">
+            <h1><i class="fas fa-globe"></i> 链接</h1>
+            <div class="link-grid">
+                <a href="course-assistant.html" class="link-card">
+                    <div class="link-card-icon"><i class="fas fa-robot"></i></div>
+                    <div class="link-card-title">AI 课程学习助手</div>
+                    <div class="link-card-desc">基于AI的智能课程学习助手，支持教材上传、题目解析、提示批改等功能</div>
+                </a>
+                <!-- 后续可在此处添加更多链接卡片 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="footer"><i class="far fa-copyright"></i> 2026 西北老汉的个人主页 | Powered by <i class="fab fa-github"></i> GitHub Pages</div>
+
+    <script>
+        function toggleNav() { document.getElementById('navLinks').classList.toggle('show'); }
+        document.addEventListener('click', function(e) {
+            var nav = document.getElementById('navLinks');
+            var hamburger = document.querySelector('.hamburger');
+            if (!nav.contains(e.target) && !hamburger.contains(e.target)) { nav.classList.remove('show'); }
+        });
+    </script>
+</body>
+</html>

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>问题回顾 - AI课程学习助手</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- KaTeX库用于渲染LaTeX公式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
@@ -17,12 +19,12 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f7fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
             min-height: 100vh;
         }
 
         .header {
-            background: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             padding: 20px;
             display: flex;
@@ -31,6 +33,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
         }
 
         .header h1 {
@@ -46,40 +49,50 @@
         }
 
         .back-btn {
-            padding: 8px 16px;
-            background: #3498db;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
             color: #fff;
             border: none;
-            border-radius: 6px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 14px;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
 
         .back-btn:hover {
-            background: #2980b9;
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
         }
 
         .filter-btn {
-            padding: 8px 16px;
-            background: #34495e;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
             color: #fff;
             border: none;
-            border-radius: 6px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
 
         .filter-btn.active {
-            background: #e67e22;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            box-shadow: 0 4px 15px rgba(243,156,18,0.4);
         }
 
         .filter-btn:hover {
-            background: #3d566e;
+            background: rgba(255,255,255,0.2);
         }
 
         .filter-btn.active:hover {
-            background: #d35400;
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
         }
 
         .container {
@@ -94,21 +107,23 @@
         .question-list {
             width: 400px;
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             overflow: hidden;
             flex-shrink: 0;
             max-height: calc(100vh - 120px);
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(102, 126, 234, 0.1);
         }
 
         .list-header {
             padding: 15px 20px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+            background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
             font-size: 14px;
-            color: #495057;
+            color: #667eea;
+            font-weight: 600;
         }
 
         .list-content {
@@ -131,8 +146,8 @@
         }
 
         .question-item.active {
-            background: #e3f2fd;
-            border-left: 3px solid #3498db;
+            background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(118,75,162,0.15) 100%);
+            border-left: 3px solid #667eea;
         }
 
         .question-item.marked {
@@ -140,7 +155,7 @@
         }
 
         .question-item.active.marked {
-            background: #fff3cd;
+            background: linear-gradient(135deg, rgba(243,156,18,0.15) 0%, rgba(230,126,34,0.15) 100%);
         }
 
         .question-checkbox {
@@ -176,10 +191,10 @@
             font-size: 11px;
         }
 
-        .tag-hint { background: #f39c12; color: #fff; }
-        .tag-correct { background: #e74c3c; color: #fff; }
-        .tag-generate { background: #9b59b6; color: #fff; }
-        .tag-ask { background: #3498db; color: #fff; }
+        .tag-hint { background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: #fff; }
+        .tag-correct { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: #fff; }
+        .tag-generate { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: #fff; }
+        .tag-ask { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
 
         .mark-btn {
             background: none;
@@ -222,18 +237,19 @@
         .detail-area {
             flex: 1;
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             max-height: calc(100vh - 120px);
+            border: 1px solid rgba(102, 126, 234, 0.1);
         }
 
         .detail-header {
             padding: 15px 20px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+            background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -241,7 +257,10 @@
 
         .detail-header h3 {
             font-size: 16px;
-            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .detail-actions {
@@ -250,12 +269,16 @@
         }
 
         .action-btn {
-            padding: 8px 16px;
+            padding: 10px 18px;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 13px;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .action-btn:disabled {
@@ -264,39 +287,47 @@
         }
 
         .btn-hint {
-            background: #f39c12;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
             color: #fff;
+            box-shadow: 0 3px 10px rgba(243,156,18,0.3);
         }
 
         .btn-hint:hover:not(:disabled) {
-            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243,156,18,0.4);
         }
 
         .btn-explain {
-            background: #27ae60;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
             color: #fff;
+            box-shadow: 0 3px 10px rgba(39,174,96,0.3);
         }
 
         .btn-explain:hover:not(:disabled) {
-            background: #219a52;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.4);
         }
 
         .btn-generate {
-            background: #9b59b6;
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
             color: #fff;
+            box-shadow: 0 3px 10px rgba(155,89,182,0.3);
         }
 
         .btn-generate:hover:not(:disabled) {
-            background: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(155,89,182,0.4);
         }
 
         .btn-delete {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: #fff;
+            box-shadow: 0 3px 10px rgba(231,76,60,0.3);
         }
 
         .btn-delete:hover:not(:disabled) {
-            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231,76,60,0.4);
         }
 
         .detail-content {
@@ -341,8 +372,8 @@
         .ai-response {
             margin-top: 20px;
             padding: 15px;
-            background: #e8f5e9;
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(39,174,96,0.1) 0%, rgba(46,204,113,0.1) 100%);
+            border-radius: 12px;
             border-left: 4px solid #27ae60;
         }
 
@@ -351,6 +382,9 @@
             margin-bottom: 10px;
             border: none;
             padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .empty-detail {
@@ -380,7 +414,7 @@
         .loading span {
             width: 8px;
             height: 8px;
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out both;
         }
@@ -434,6 +468,7 @@
         @media (max-width: 900px) {
             .container {
                 flex-direction: column;
+                padding: 10px;
             }
 
             .question-list {
@@ -443,6 +478,54 @@
 
             .detail-area {
                 max-height: none;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+                position: relative;
+            }
+
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .detail-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .detail-actions {
+                flex-wrap: wrap;
+                width: 100%;
+            }
+
+            .detail-actions .action-btn {
+                flex: 1;
+                min-width: 0;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .question-item {
+                padding: 12px 15px;
+            }
+
+            .detail-content {
+                padding: 15px;
+            }
+
+            .filter-btn, .back-btn {
+                padding: 6px 12px;
+                font-size: 13px;
             }
         }
 
@@ -467,11 +550,11 @@
 </head>
 <body>
     <div class="header">
-        <h1>问题回顾</h1>
+        <h1><i class="fas fa-history"></i> 问题回顾</h1>
         <div class="header-actions">
-            <button class="filter-btn" id="filterAll" onclick="setFilter('all')">全部</button>
-            <button class="filter-btn" id="filterMarked" onclick="setFilter('marked')">已标记</button>
-            <a href="course-assistant.html" class="back-btn">返回学习</a>
+            <button class="filter-btn" id="filterAll" onclick="setFilter('all')"><i class="fas fa-list"></i> 全部</button>
+            <button class="filter-btn" id="filterMarked" onclick="setFilter('marked')"><i class="fas fa-star"></i> 已标记</button>
+            <a href="course-assistant.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回学习</a>
         </div>
     </div>
 
@@ -489,16 +572,17 @@
         <!-- 右侧详情区域 -->
         <div class="detail-area">
             <div class="detail-header">
-                <h3>问题详情</h3>
+                <h3><i class="fas fa-info-circle"></i> 问题详情</h3>
                 <div class="detail-actions">
-                    <button class="action-btn btn-hint" onclick="performAction('hint')" id="btnHint" disabled>提示</button>
-                    <button class="action-btn btn-explain" onclick="performAction('explain')" id="btnExplain" disabled>详解</button>
-                    <button class="action-btn btn-generate" onclick="performAction('generate')" id="btnGenerate" disabled>生题</button>
-                    <button class="action-btn btn-delete" onclick="deleteSelected()" id="btnDelete" disabled>删除</button>
+                    <button class="action-btn btn-hint" onclick="performAction('hint')" id="btnHint" disabled><i class="fas fa-lightbulb"></i> 提示</button>
+                    <button class="action-btn btn-explain" onclick="performAction('explain')" id="btnExplain" disabled><i class="fas fa-book-reader"></i> 详解</button>
+                    <button class="action-btn btn-generate" onclick="performAction('generate')" id="btnGenerate" disabled><i class="fas fa-magic"></i> 生题</button>
+                    <button class="action-btn btn-delete" onclick="deleteSelected()" id="btnDelete" disabled><i class="fas fa-trash-alt"></i> 删除</button>
                 </div>
             </div>
             <div class="detail-content" id="detailContent">
                 <div class="empty-detail">
+                    <i class="fas fa-hand-pointer" style="font-size: 48px; color: #667eea; margin-bottom: 15px;"></i>
                     <p>请从左侧选择一个问题查看详情</p>
                     <p>点击星标可标记重点/错题</p>
                 </div>
@@ -668,6 +752,7 @@
             if (!record) {
                 detailContent.innerHTML = `
                     <div class="empty-detail">
+                        <i class="fas fa-hand-pointer" style="font-size: 48px; color: #667eea; margin-bottom: 15px;"></i>
                         <p>请从左侧选择一个问题查看详情</p>
                         <p>点击星标可标记重点/错题</p>
                     </div>

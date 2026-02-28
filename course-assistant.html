@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI课程学习助手</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- PDF.js库用于解析PDF文件 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <!-- KaTeX库用于渲染LaTeX公式 -->
@@ -19,7 +21,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f7fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
             height: 100vh;
             overflow: hidden;
         }
@@ -32,7 +34,7 @@
         /* 左侧对话列表 */
         .sidebar {
             width: 280px;
-            background: #2c3e50;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -41,8 +43,8 @@
 
         .sidebar-header {
             padding: 20px;
-            background: #1a252f;
-            border-bottom: 1px solid #34495e;
+            background: rgba(0,0,0,0.15);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .sidebar-header h2 {
@@ -50,23 +52,28 @@
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .new-chat-btn {
             width: 100%;
-            padding: 10px 15px;
-            background: #3498db;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.2);
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .new-chat-btn:hover {
-            background: #2980b9;
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
         }
 
         .chat-list {
@@ -77,23 +84,29 @@
 
         .sidebar-footer {
             padding: 15px;
-            border-top: 1px solid #34495e;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         .review-btn {
             width: 100%;
-            padding: 10px 15px;
-            background: #e67e22;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(243,156,18,0.3);
         }
 
         .review-btn:hover {
-            background: #d35400;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243,156,18,0.4);
         }
 
         /* 文件夹样式 */
@@ -105,7 +118,7 @@
             display: flex;
             align-items: center;
             padding: 10px 15px;
-            background: #1a252f;
+            background: rgba(0,0,0,0.15);
             border-radius: 8px;
             cursor: pointer;
             margin-bottom: 3px;
@@ -113,7 +126,7 @@
         }
 
         .folder-header:hover {
-            background: #243342;
+            background: rgba(0,0,0,0.25);
         }
 
         .folder-icon {
@@ -136,8 +149,8 @@
 
         .folder-name-input {
             flex: 1;
-            background: #34495e;
-            border: 1px solid #3498db;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
             border-radius: 4px;
             color: #fff;
             padding: 2px 6px;
@@ -158,18 +171,18 @@
         .folder-btn {
             background: none;
             border: none;
-            color: #95a5a6;
+            color: rgba(255,255,255,0.7);
             cursor: pointer;
             font-size: 12px;
             padding: 2px 5px;
         }
 
         .folder-btn:hover {
-            color: #3498db;
+            color: #fff;
         }
 
         .folder-btn.delete:hover {
-            color: #e74c3c;
+            color: #ff6b6b;
         }
 
         .folder-chats {
@@ -185,25 +198,29 @@
             width: 100%;
             padding: 8px 15px;
             background: transparent;
-            color: #95a5a6;
-            border: 1px dashed #4a6278;
+            color: rgba(255,255,255,0.6);
+            border: 1px dashed rgba(255,255,255,0.3);
             border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
             margin-bottom: 10px;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .new-folder-btn:hover {
-            background: #34495e;
-            color: #ecf0f1;
-            border-color: #5d7a94;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border-color: rgba(255,255,255,0.5);
         }
 
         .chat-item {
             padding: 10px 12px;
             margin-bottom: 5px;
-            background: #34495e;
+            background: rgba(255,255,255,0.15);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
@@ -213,11 +230,12 @@
         }
 
         .chat-item:hover {
-            background: #3d566e;
+            background: rgba(255,255,255,0.25);
         }
 
         .chat-item.active {
-            background: #3498db;
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .chat-item-title {
@@ -230,8 +248,8 @@
 
         .chat-item-title-input {
             flex: 1;
-            background: #2c3e50;
-            border: 1px solid #3498db;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
             border-radius: 4px;
             color: #fff;
             padding: 2px 6px;
@@ -253,18 +271,18 @@
         .chat-btn {
             background: none;
             border: none;
-            color: #95a5a6;
+            color: rgba(255,255,255,0.7);
             cursor: pointer;
             padding: 3px 5px;
             font-size: 12px;
         }
 
         .chat-btn:hover {
-            color: #ecf0f1;
+            color: #fff;
         }
 
         .chat-btn.delete:hover {
-            color: #e74c3c;
+            color: #ff6b6b;
         }
 
         /* 移动对话弹窗 */
@@ -396,17 +414,22 @@
 
         .textbook-upload-btn {
             padding: 8px 16px;
-            background: #28a745;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
             color: #fff;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(39,174,96,0.3);
         }
 
         .textbook-upload-btn:hover {
-            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.4);
         }
 
         .textbook-list {
@@ -470,12 +493,12 @@
         }
 
         .message.assistant .message-avatar {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
         }
 
         .message.user .message-avatar {
-            background: #27ae60;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
             color: #fff;
         }
 
@@ -493,7 +516,7 @@
         }
 
         .message.user .message-content {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
         }
 
@@ -577,17 +600,22 @@
 
         .image-upload-btn {
             padding: 10px 15px;
-            background: #6c757d;
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
         }
 
         .image-upload-btn:hover {
-            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .text-input {
@@ -615,10 +643,14 @@
         .action-btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .action-btn:disabled {
@@ -627,41 +659,49 @@
         }
 
         .btn-hint {
-            background: #f39c12;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
             color: #fff;
+            box-shadow: 0 3px 10px rgba(243,156,18,0.3);
         }
 
         .btn-hint:hover:not(:disabled) {
-            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243,156,18,0.4);
         }
 
         .btn-correct {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: #fff;
+            box-shadow: 0 3px 10px rgba(231,76,60,0.3);
         }
 
         .btn-correct:hover:not(:disabled) {
-            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231,76,60,0.4);
         }
 
         .btn-generate {
-            background: #9b59b6;
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
             color: #fff;
+            box-shadow: 0 3px 10px rgba(155,89,182,0.3);
         }
 
         .btn-generate:hover:not(:disabled) {
-            background: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(155,89,182,0.4);
         }
 
         .btn-ask {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             flex: 1;
             min-width: 120px;
+            box-shadow: 0 3px 10px rgba(102,126,234,0.3);
         }
 
         .btn-ask:hover:not(:disabled) {
-            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
         }
 
         /* 加载动画 */
@@ -674,7 +714,7 @@
         .loading span {
             width: 8px;
             height: 8px;
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out both;
         }
@@ -750,22 +790,63 @@
             overflow-y: hidden;
         }
 
+        /* 移动端侧边栏切换按钮 */
+        .mobile-sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1001;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+            transition: all 0.3s;
+        }
+
+        .mobile-sidebar-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.5);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .sidebar {
-                width: 60px;
+                position: fixed;
+                left: -280px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+                transition: left 0.3s ease;
             }
 
-            .sidebar-header h2, .chat-item-title {
-                display: none;
+            .sidebar.show {
+                left: 0;
             }
 
-            .new-chat-btn {
-                padding: 10px;
-                font-size: 20px;
-            }
-
-            .chat-item {
+            .mobile-sidebar-toggle {
+                display: flex;
+                align-items: center;
                 justify-content: center;
             }
 
@@ -776,23 +857,41 @@
             .action-buttons {
                 flex-direction: column;
             }
+
+            .textbook-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .input-row {
+                flex-direction: column;
+            }
+
+            .image-upload-btn {
+                align-self: flex-start;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 移动端侧边栏切换 -->
+    <button class="mobile-sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
     <div class="container">
         <!-- 左侧对话列表 -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2>AI课程助手</h2>
-                <button class="new-chat-btn" onclick="createNewChat()">+ 新建对话</button>
+                <h2><i class="fas fa-robot"></i> AI课程助手</h2>
+                <button class="new-chat-btn" onclick="createNewChat()"><i class="fas fa-plus"></i> 新建对话</button>
             </div>
             <div class="chat-list" id="chatList">
-                <button class="new-folder-btn" onclick="createNewFolder()">+ 新建文件夹</button>
+                <button class="new-folder-btn" onclick="createNewFolder()"><i class="fas fa-folder-plus"></i> 新建文件夹</button>
                 <!-- 对话列表项将动态生成 -->
             </div>
             <div class="sidebar-footer">
-                <button class="review-btn" onclick="window.open('review.html', '_blank')">问题回顾</button>
+                <button class="review-btn" onclick="window.open('review.html', '_blank')"><i class="fas fa-history"></i> 问题回顾</button>
             </div>
         </div>
 
@@ -813,9 +912,9 @@
             <!-- 教材上传区域 -->
             <div class="textbook-area">
                 <div class="textbook-header">
-                    <h3>参考教材</h3>
+                    <h3><i class="fas fa-book-open"></i> 参考教材</h3>
                     <button class="textbook-upload-btn" onclick="document.getElementById('textbookInput').click()">
-                        上传教材
+                        <i class="fas fa-upload"></i> 上传教材
                     </button>
                     <input type="file" id="textbookInput" class="hidden-input" accept=".md,.tex,.txt,.pdf" onchange="handleTextbookUpload(event)">
                 </div>
@@ -842,16 +941,16 @@
                 <div class="input-preview" id="inputPreview"></div>
                 <div class="input-row">
                     <button class="image-upload-btn" onclick="document.getElementById('imageInput').click()">
-                        上传图片
+                        <i class="fas fa-image"></i> 上传图片
                     </button>
                     <input type="file" id="imageInput" class="hidden-input" accept="image/*" onchange="handleImageUpload(event)">
                     <textarea class="text-input" id="textInput" placeholder="输入您的问题或题目内容..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
                 </div>
                 <div class="action-buttons">
-                    <button class="action-btn btn-hint" onclick="sendMessage('hint')" id="btnHint">提示</button>
-                    <button class="action-btn btn-correct" onclick="sendMessage('correct')" id="btnCorrect">批改</button>
-                    <button class="action-btn btn-generate" onclick="sendMessage('generate')" id="btnGenerate">生题</button>
-                    <button class="action-btn btn-ask" onclick="sendMessage('ask')" id="btnAsk">自由问</button>
+                    <button class="action-btn btn-hint" onclick="sendMessage('hint')" id="btnHint"><i class="fas fa-lightbulb"></i> 提示</button>
+                    <button class="action-btn btn-correct" onclick="sendMessage('correct')" id="btnCorrect"><i class="fas fa-check-circle"></i> 批改</button>
+                    <button class="action-btn btn-generate" onclick="sendMessage('generate')" id="btnGenerate"><i class="fas fa-magic"></i> 生题</button>
+                    <button class="action-btn btn-ask" onclick="sendMessage('ask')" id="btnAsk"><i class="fas fa-paper-plane"></i> 自由问</button>
                 </div>
             </div>
         </div>
@@ -1176,7 +1275,7 @@
         function renderChatList() {
             const chatList = document.getElementById('chatList');
             
-            let html = '<button class="new-folder-btn" onclick="createNewFolder()">+ 新建文件夹</button>';
+            let html = '<button class="new-folder-btn" onclick="createNewFolder()"><i class="fas fa-folder-plus"></i> 新建文件夹</button>';
 
             // 渲染文件夹及其对话
             state.folders.forEach(folder => {
@@ -1733,6 +1832,14 @@
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
+
+        // 移动端侧边栏切换
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
 
         // 初始化应用
         init();

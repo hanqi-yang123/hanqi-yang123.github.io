@@ -1,0 +1,1195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="算法基础课程中文复习资料：翻译、解释、例子、复杂度、易错点与自测。">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23087f6d%22/><text x=%2232%22 y=%2242%22 text-anchor=%22middle%22 font-size=%2234%22 fill=%22white%22>A</text></svg>">
+  <title>算法基础 · 复习资料</title>
+  <style>
+    :root {
+      --bg: #f5f3ee;
+      --panel: rgba(255, 255, 255, 0.88);
+      --panel-solid: #fffdf9;
+      --text: #1f2926;
+      --muted: #66726d;
+      --line: #dcded7;
+      --accent: #087f6d;
+      --accent-strong: #056554;
+      --accent-soft: #dff3ec;
+      --warm: #b75b34;
+      --code: #182421;
+      --code-text: #e7f5ef;
+      --shadow: 0 18px 50px rgba(32, 49, 43, 0.10);
+      --sidebar: 310px;
+      --radius: 20px;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #101815;
+      --panel: rgba(25, 37, 33, 0.92);
+      --panel-solid: #192521;
+      --text: #e8f0ed;
+      --muted: #a3b2ac;
+      --line: #32433d;
+      --accent: #55d8bd;
+      --accent-strong: #82ead4;
+      --accent-soft: #1d453c;
+      --warm: #f29a71;
+      --code: #09100e;
+      --code-text: #dff8ef;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.30);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(8, 127, 109, 0.11), transparent 28rem),
+        radial-gradient(circle at 92% 86%, rgba(183, 91, 52, 0.08), transparent 26rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      line-height: 1.78;
+    }
+
+    button, input { font: inherit; }
+    a { color: var(--accent-strong); text-underline-offset: 3px; }
+    a:hover { color: var(--warm); }
+
+    .reading-progress {
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--warm));
+      transition: width 80ms linear;
+    }
+
+    .app-shell { min-height: 100vh; }
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 30;
+      width: var(--sidebar);
+      padding: 26px 18px 22px;
+      overflow-y: auto;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      padding: 0 8px 22px;
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      color: white;
+      background: linear-gradient(145deg, var(--accent), var(--accent-strong));
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(8, 127, 109, .26);
+      font: 800 20px/1 ui-monospace, monospace;
+    }
+    .brand strong { display: block; font-size: 17px; letter-spacing: .02em; }
+    .brand small { display: block; color: var(--muted); font-size: 12px; }
+
+    .search-box { position: relative; margin: 0 5px 18px; }
+    .search-box input {
+      width: 100%;
+      height: 44px;
+      padding: 0 66px 0 39px;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      outline: none;
+      background: var(--panel-solid);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+    .search-icon { position: absolute; left: 13px; top: 10px; color: var(--muted); }
+    .shortcut { position: absolute; right: 9px; top: 10px; padding: 1px 6px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; font-size: 11px; }
+
+    .chapter-nav { display: grid; gap: 4px; }
+    .chapter-link {
+      display: grid;
+      grid-template-columns: 38px 1fr 12px;
+      gap: 8px;
+      align-items: center;
+      min-height: 48px;
+      padding: 8px 9px;
+      color: var(--text);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background .18s, transform .18s;
+    }
+    .chapter-link:hover { color: var(--text); background: var(--accent-soft); transform: translateX(2px); }
+    .chapter-link.active { color: var(--accent-strong); background: var(--accent-soft); font-weight: 700; }
+    .chapter-number { color: var(--muted); font: 700 11px/1 ui-monospace, monospace; letter-spacing: .05em; }
+    .chapter-link-title { font-size: 13px; line-height: 1.3; }
+    .read-dot { width: 7px; height: 7px; border: 1.5px solid var(--line); border-radius: 50%; }
+    .chapter-link.completed .read-dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+    .sidebar-footer { margin-top: 20px; padding: 16px 8px 0; color: var(--muted); border-top: 1px solid var(--line); font-size: 11px; }
+    .completion-line { height: 5px; margin: 8px 0; overflow: hidden; border-radius: 99px; background: var(--line); }
+    .completion-line span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--accent); transition: width .25s; }
+
+    .main { min-height: 100vh; margin-left: var(--sidebar); }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 66px;
+      padding: 0 clamp(22px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      backdrop-filter: blur(16px);
+    }
+    .breadcrumbs { min-width: 0; color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .breadcrumbs strong { color: var(--text); }
+    .top-actions { display: flex; gap: 8px; }
+    .icon-button, .menu-button {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--panel-solid);
+      cursor: pointer;
+    }
+    .icon-button:hover, .menu-button:hover { border-color: var(--accent); color: var(--accent-strong); }
+    .menu-button { display: none; }
+
+    .content { width: min(100% - 40px, 1000px); margin: 0 auto; padding: 54px 0 100px; }
+    .chapter {
+      display: none;
+      padding: clamp(26px, 5vw, 64px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-solid);
+      box-shadow: var(--shadow);
+      animation: enter .28s ease-out;
+    }
+    .chapter.active { display: block; }
+    @keyframes enter { from { opacity: 0; transform: translateY(8px); } }
+
+    .article-kicker { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 20px; color: var(--muted); font: 700 11px/1.3 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+    h1, h2, h3, h4 { line-height: 1.28; scroll-margin-top: 90px; }
+    h1 { margin: 0 0 30px; font-size: clamp(30px, 5vw, 52px); letter-spacing: -.035em; }
+    h2 { margin: 48px 0 15px; padding-top: 12px; border-top: 1px solid var(--line); font-size: clamp(22px, 3vw, 29px); }
+    h3 { margin: 32px 0 10px; color: var(--accent-strong); font-size: 19px; }
+    h4 { margin: 24px 0 8px; font-size: 16px; }
+    .heading-anchor { margin-left: 8px; opacity: 0; font-size: .65em; text-decoration: none; }
+    h2:hover .heading-anchor, h3:hover .heading-anchor, h4:hover .heading-anchor { opacity: .55; }
+    p { margin: 10px 0 15px; }
+    ul, ol { padding-left: 1.45em; }
+    li { margin: 5px 0; }
+    strong { color: color-mix(in srgb, var(--text) 82%, var(--accent)); }
+
+    code {
+      padding: .16em .42em;
+      color: var(--accent-strong);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--accent-soft);
+      font: 600 .9em/1.5 "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    }
+    pre {
+      margin: 20px 0;
+      padding: 20px 22px;
+      overflow: auto;
+      color: var(--code-text);
+      border-radius: 15px;
+      background: var(--code);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    pre code { padding: 0; color: inherit; border: 0; background: none; font-weight: 500; }
+    blockquote { margin: 20px 0; padding: 14px 18px; color: var(--text); border-left: 4px solid var(--warm); border-radius: 0 12px 12px 0; background: color-mix(in srgb, var(--warm) 10%, transparent); }
+    hr { margin: 40px 0; border: 0; border-top: 1px solid var(--line); }
+
+    .table-wrap { margin: 20px 0 28px; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 11px 13px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: var(--accent-strong); background: var(--accent-soft); font-size: 12px; letter-spacing: .02em; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 48%, transparent); }
+
+    .note-tag { display: inline-block; margin-right: 5px; padding: 1px 6px; color: white; border-radius: 5px; background: var(--warm); font: 800 10px/1.6 ui-monospace, monospace; vertical-align: 1px; }
+    .tag-EXAM { background: #7653ba; }
+    .tag-TODO, .tag-CODE { background: #64748b; }
+    .tag-Q { background: #2770a8; }
+
+    .chapter-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .complete-button { padding: 10px 14px; color: var(--text); border: 1px solid var(--line); border-radius: 11px; background: transparent; cursor: pointer; }
+    .complete-button:hover, .complete-button.done { color: var(--accent-strong); border-color: var(--accent); background: var(--accent-soft); }
+
+    .search-results { display: none; padding: clamp(24px, 5vw, 48px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel-solid); box-shadow: var(--shadow); }
+    .search-results.active { display: block; }
+    .search-results h1 { font-size: 30px; }
+    .result-list { display: grid; gap: 12px; }
+    .result-item { display: block; padding: 16px 18px; color: var(--text); border: 1px solid var(--line); border-radius: 13px; text-decoration: none; }
+    .result-item:hover { color: var(--text); border-color: var(--accent); background: var(--accent-soft); }
+    .result-item strong { display: block; margin-bottom: 3px; }
+    .result-item small { color: var(--muted); }
+    mark { padding: 0 .1em; color: inherit; border-radius: 3px; background: #ffe08a; }
+
+    .empty-state { padding: 48px 12px; color: var(--muted); text-align: center; }
+
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-104%); transition: transform .25s ease; box-shadow: var(--shadow); }
+      body.sidebar-open .sidebar { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .menu-button { display: grid; }
+      .topbar { padding: 0 18px; }
+      .content { width: min(100% - 24px, 850px); padding-top: 24px; }
+      .chapter { border-radius: 16px; }
+    }
+
+    @media (max-width: 560px) {
+      .chapter { padding: 24px 18px 36px; }
+      .article-kicker span:last-child { display: none; }
+      h1 { font-size: 29px; }
+      h2 { font-size: 22px; }
+      .chapter-footer { align-items: stretch; flex-direction: column; }
+      .chapter-footer a { text-align: center; }
+      th, td { min-width: 130px; }
+    }
+
+    @media print {
+      :root { --text: #111; --muted: #555; --line: #ccc; --panel-solid: #fff; }
+      body { background: white; }
+      .sidebar, .topbar, .reading-progress, .search-results, .chapter-footer { display: none !important; }
+      .main { margin: 0; }
+      .content { width: 100%; padding: 0; }
+      .chapter { display: none !important; padding: 0; border: 0; box-shadow: none; }
+      .chapter.active { display: block !important; }
+      pre { white-space: pre-wrap; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+  <style>
+    /* 个人主页集成：返回学习页 */
+    .site-back {
+      display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px;
+      border: 1px solid var(--line); border-radius: 9px; color: var(--muted);
+      font-size: 13px; text-decoration: none; white-space: nowrap;
+    }
+    .site-back:hover { color: var(--accent); border-color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body id="top">
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="章节导航">
+      <div class="brand">
+        <div class="brand-mark">A·</div>
+        <div><strong>算法基础</strong><small>可持续扩充复习资料</small></div>
+      </div>
+      <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input id="searchInput" type="search" placeholder="搜索概念、算法、复杂度…" autocomplete="off" aria-label="全文搜索">
+        <span class="shortcut">Ctrl K</span>
+      </div>
+      <nav class="chapter-nav">
+  <a class="chapter-link" href="#chapter-home-0" data-chapter-link="chapter-home-0">
+    <span class="chapter-number">总览</span>
+    <span class="chapter-link-title">算法基础复习资料</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-00" data-chapter-link="chapter-00">
+    <span class="chapter-number">00</span>
+    <span class="chapter-link-title">课程地图</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-01" data-chapter-link="chapter-01">
+    <span class="chapter-number">01</span>
+    <span class="chapter-link-title">算法与分析基础</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-02" data-chapter-link="chapter-02">
+    <span class="chapter-number">02</span>
+    <span class="chapter-link-title">渐近记号与递归式</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-03" data-chapter-link="chapter-03">
+    <span class="chapter-number">03</span>
+    <span class="chapter-link-title">比较排序</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-04" data-chapter-link="chapter-04">
+    <span class="chapter-number">04</span>
+    <span class="chapter-link-title">线性时间排序与选择</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-05" data-chapter-link="chapter-05">
+    <span class="chapter-number">05</span>
+    <span class="chapter-link-title">高级数据结构 I：搜索树与增广</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-06" data-chapter-link="chapter-06">
+    <span class="chapter-number">06</span>
+    <span class="chapter-link-title">高级数据结构 II：可并堆与并查集</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-07" data-chapter-link="chapter-07">
+    <span class="chapter-number">07</span>
+    <span class="chapter-link-title">动态规划</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-08" data-chapter-link="chapter-08">
+    <span class="chapter-number">08</span>
+    <span class="chapter-link-title">贪心算法</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+  <a class="chapter-link" href="#chapter-09" data-chapter-link="chapter-09">
+    <span class="chapter-number">09</span>
+    <span class="chapter-link-title">术语表与复杂度速查</span>
+    <span class="read-dot" aria-hidden="true"></span>
+  </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div><span id="completedCount">0</span> / 11 章已复习</div>
+        <div class="completion-line"><span id="completionBar"></span></div>
+        <div>内容生成于 2026年10月6日 10:54</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-button" type="button" id="menuButton" aria-label="打开目录">☰</button>
+        <a class="site-back" href="../../study.html">← 学习主页</a>
+        <div class="breadcrumbs">复习资料 / <strong id="currentTitle">算法基础复习资料</strong></div>
+        <div class="top-actions">
+          <button class="icon-button" type="button" id="printButton" title="打印当前章" aria-label="打印当前章">⎙</button>
+          <button class="icon-button" type="button" id="themeButton" title="切换明暗主题" aria-label="切换明暗主题">◐</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="search-results" id="searchResults" aria-live="polite">
+          <div class="article-kicker"><span>全文检索</span><span id="searchCount"></span></div>
+          <h1 id="searchHeading">搜索结果</h1>
+          <div class="result-list" id="resultList"></div>
+        </section>
+        
+  <article class="chapter active" id="view-chapter-home-0" data-chapter="chapter-home-0" data-title="算法基础复习资料">
+    <div class="article-kicker"><span>总览</span><span>README.md</span></div>
+    <h1 id="chapter-home-0">算法基础复习资料</h1>
+<blockquote>基于当前目录中 <code>Algorithm_2026*.pdf</code> 课件整理。这不是逐页直译，而是将英文内容重组为适合复习的中文知识体系，并补充直觉、例子、复杂度与易错点。</blockquote>
+<h2 id="chapter-home-0-h1">使用方法<a class="heading-anchor" href="#chapter-home-0-h1" aria-label="链接到本节">#</a></h2>
+<ol><li>第一遍按 01 → 08 顺序学习，先建立分析方法，再学具体算法。</li><li>考前优先看每章的“一页速记”、“易错点”和“自测”。</li><li>做题时将新反例、错题和证明补到对应章节，不要只记在题目旁。</li><li>本资料默认数组下标从 0 开始；引用课件伪代码时如使用 1 起始会明确说明。</li></ol>
+<h2 id="chapter-home-0-h2">内容导航<a class="heading-anchor" href="#chapter-home-0-h2" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>章节</th><th>主题</th><th>对应课件</th><th>状态</th></tr></thead><tbody><tr><td><a href="#chapter-00">00</a></td><td>课程地图与学习法</td><td>Topic 0</td><td>已整理</td></tr><tr><td><a href="#chapter-01">01</a></td><td>算法、排序入门、运行时间分析</td><td>Topic 1</td><td>已整理</td></tr><tr><td><a href="#chapter-02">02</a></td><td>O/Ω/Θ、常见函数、递归式</td><td>Topic 2</td><td>已整理</td></tr><tr><td><a href="#chapter-03">03</a></td><td>插入/选择/冒泡/希尔/归并/堆/快排</td><td>Topic 3</td><td>已整理</td></tr><tr><td><a href="#chapter-04">04</a></td><td>计数/基数/桶排序、顺序统计量</td><td>Topic 4-1/4-2</td><td>已整理</td></tr><tr><td><a href="#chapter-05">05</a></td><td>BST、红黑树、数据结构增广</td><td>Topic 5-1</td><td>已整理</td></tr><tr><td><a href="#chapter-06">06</a></td><td>二项堆、Fibonacci 堆、并查集</td><td>Topic 5-2</td><td>已整理</td></tr><tr><td><a href="#chapter-07">07</a></td><td>钢条切割、矩阵链、LCS、最优 BST</td><td>Topic 6-1</td><td>已整理</td></tr><tr><td><a href="#chapter-08">08</a></td><td>活动选择、Huffman、拟阵、任务调度</td><td>Topic 6-2</td><td>已整理</td></tr><tr><td><a href="#chapter-09">09</a></td><td>中英文术语、公式与复杂度表</td><td>全部</td><td>已整理</td></tr></tbody></table></div>
+<h2 id="chapter-home-0-h3">资料范围<a class="heading-anchor" href="#chapter-home-0-h3" aria-label="链接到本节">#</a></h2>
+<p>主线来源是 10 个 Topic PDF（Topic 0、1、2、3、4-1、4-2、5-1、5-2、6-1、6-2）。<code>Introduction_to_algorithms_3rd_Edition.pdf</code> 是配套教材，适合用来补证明和习题；<code>算法基础hw1.pdf</code> 是作业，本轮未将题解混入知识笔记。</p>
+<h2 id="chapter-home-0-h4">持续扩充规范<a class="heading-anchor" href="#chapter-home-0-h4" aria-label="链接到本节">#</a></h2>
+<p>新增一个知识点时，建议按以下模板：</p>
+<pre><code data-language="markdown">### 中文名（English term）
+
+- 问题：输入、输出、约束是什么？
+- 核心思想：一句话说清。
+- 不变式/状态：为什么正确？
+- 复杂度：时间、空间、最好/平均/最坏。
+- 例子：至少手算一组小输入。
+- 易错点：边界、反例、适用条件。
+- 关联：与哪个已学算法相似？</code></pre>
+<p>建议使用以下标记：<code>[TODO]</code> 待补充，<code>[Q]</code> 尚未解决的问题，<code>[EXAM]</code> 考试高频，<code>[PITFALL]</code> 易错点，<code>[CODE]</code> 待补代码实现。</p>
+<h2 id="chapter-home-0-h5">复习主线<a class="heading-anchor" href="#chapter-home-0-h5" aria-label="链接到本节">#</a></h2>
+<pre><code data-language="text">问题建模
+  ↓
+正确性：循环不变式 / 归纳 / 交换论证
+  ↓
+效率：渐近记号 / 递归式 / 均摊与期望分析
+  ↓
+设计范式：分治 / 动态规划 / 贪心
+  ↓
+数据结构：堆 / 搜索树 / 并查集</code></pre>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-home-0"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-00" data-chapter="chapter-00" data-title="00 课程地图">
+    <div class="article-kicker"><span>00</span><span>00-课程地图.md</span></div>
+    <h1 id="chapter-00">00 课程地图</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_0.pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_0.pdf</a></p>
+<h2 id="chapter-00-h1">课程目标<a class="heading-anchor" href="#chapter-00-h1" aria-label="链接到本节">#</a></h2>
+<p><code>Introduction to Algorithms</code> 通常译为“算法导论”。这门课不只要“会写代码”，而是要回答四个问题：</p>
+<ol><li>问题的输入、输出和约束是什么？</li><li>算法为什么一定正确？</li><li>它使用多少时间和空间？</li><li>当输入变大时，有没有更好的方法？</li></ol>
+<p>课件覆盖的主线包括：</p>
+<ul><li>基本概念与复杂度分析；</li><li>比较排序和线性时间排序；</li><li>顺序统计量与选择问题；</li><li>二叉搜索树、红黑树、可并堆、并查集；</li><li>分治、动态规划、贪心等设计范式。</li></ul>
+<p>Topic 0 还预告了字符串匹配算法（KMP、BM、KR 等），但当前目录中尚无对应 Topic 课件，因此留作后续扩充项。</p>
+<h2 id="chapter-00-h2">一个问题如何选算法<a class="heading-anchor" href="#chapter-00-h2" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>问题特征</th><th>优先想到</th><th>检查点</th></tr></thead><tbody><tr><td>小规模或基本有序</td><td>插入排序</td><td>是否可利用“逆序很少”</td></tr><tr><td>通用内排序，希望平均快</td><td>随机化快排</td><td>栈深度和最坏情况</td></tr><tr><td>要稳定的 <code>O(n log n)</code></td><td>归并排序</td><td>是否接受 <code>O(n)</code> 额外空间</td></tr><tr><td>需要不断取最小/最大元素</td><td>优先队列/堆</td><td>是否需要合并堆</td></tr><tr><td>键是小范围整数</td><td>计数排序</td><td><code>k</code> 相对 <code>n</code> 是否足够小</td></tr><tr><td>求第 <code>i</code> 小而非全排序</td><td>Quickselect / SELECT</td><td>不必支付全排序代价</td></tr><tr><td>最优化且子问题重叠</td><td>动态规划</td><td>状态和转移是否完整</td></tr><tr><td>局部选择可证明安全</td><td>贪心</td><td>必须有交换论证/贪心选择性质</td></tr><tr><td>反复合并连通分量</td><td>并查集</td><td>路径压缩 + 按秩合并</td></tr></tbody></table></div>
+<h2 id="chapter-00-h3">规模比常数更重要<a class="heading-anchor" href="#chapter-00-h3" aria-label="链接到本节">#</a></h2>
+<p>假设机器每秒可做 <code>10^8</code> 次基本操作：</p>
+<ul><li><code>n = 10^5</code> 时，<code>n log₂n ≈ 1.66×10^6</code>，通常可行；</li><li><code>n² = 10^10</code>，通常已不可行；</li><li><code>2^n</code> 在 <code>n = 50</code> 时已远超常规计算能力。</li></ul>
+<p>这就是渐近分析的价值：它忽略机器和编程语言的小差别，抓住输入增长时的根本趋势。</p>
+<h2 id="chapter-00-h4">复习节奏<a class="heading-anchor" href="#chapter-00-h4" aria-label="链接到本节">#</a></h2>
+<ul><li>概念阶段：每学一个算法，至少能说出“问题-思想-正确性-复杂度”。</li><li>手算阶段：对 5–8 个元素手工演算，尤其是堆、快排分区、红黑树修复。</li><li>证明阶段：为循环写不变式，为贪心写交换论证，为 DP 写最优子结构。</li><li>实现阶段：代码中专门测试空输入、单元素、重复元素、已排序和逆序输入。</li></ul>
+<h2 id="chapter-00-h5">自测<a class="heading-anchor" href="#chapter-00-h5" aria-label="链接到本节">#</a></h2>
+<ol><li>为什么“能跑出正确结果”不等于已证明算法正确？</li><li>如果只需要前 100 大的元素，为什么不一定要对亿级数据全排序？</li><li>给出一个“局部最优但全局不最优”的反例，说明贪心不能只靠直觉。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-00"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-01" data-chapter="chapter-01" data-title="01 算法与分析基础">
+    <div class="article-kicker"><span>01</span><span>01-算法与分析基础.md</span></div>
+    <h1 id="chapter-01">01 算法与分析基础</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_1.pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_1.pdf</a></p>
+<h2 id="chapter-01-h1">1. 什么是算法<a class="heading-anchor" href="#chapter-01-h1" aria-label="链接到本节">#</a></h2>
+<p>算法（algorithm）是一个明确的计算过程：接收输入（input），经过有限步骤，产生输出（output）。一个完整的算法问题应当同时说明：</p>
+<ul><li>输入的数据类型和约束；</li><li>输出必须满足的性质；</li><li>对所有合法输入都终止；</li><li>结果对所有合法输入都正确。</li></ul>
+<h3 id="chapter-01-h2">例：排序问题（sorting problem）<a class="heading-anchor" href="#chapter-01-h2" aria-label="链接到本节">#</a></h3>
+<ul><li>输入：长度为 <code>n</code> 的序列 <code>⟨a₁,a₂,…,aₙ⟩</code>。</li><li>输出：输入元素的一个重排 <code>⟨a&#39;₁,…,a&#39;ₙ⟩</code>，使 <code>a&#39;₁ ≤ … ≤ a&#39;ₙ</code>。</li></ul>
+<p>关键词是“重排”：不仅要有序，不能丢元素、添元素或改变重复次数。</p>
+<h2 id="chapter-01-h3">2. 为什么研究算法<a class="heading-anchor" href="#chapter-01-h3" aria-label="链接到本节">#</a></h2>
+<p>硬件更快不能抵消数量级差距。假设算法 A 需要 <code>n²</code> 次操作，算法 B 需要 <code>n log n</code> 次。当 <code>n</code> 足够大时，即使 A 跑在更快的机器上，B 仍可能在数量级上胜出。</p>
+<p>算法还是研究和工程的共同语言：它迫使我们区分“一个方案看起来可行”与“该方案对所有输入可证明地正确且高效”。</p>
+<h2 id="chapter-01-h4">3. 插入排序作为入门例子<a class="heading-anchor" href="#chapter-01-h4" aria-label="链接到本节">#</a></h2>
+<p>插入排序（insertion sort）类似整理手中的扑克牌：左侧始终有序，每次取一张新牌，向左找它的位置。</p>
+<pre><code data-language="text">INSERTION-SORT(A)
+for j = 1 .. n-1
+    key = A[j]
+    i = j-1
+    while i &gt;= 0 and A[i] &gt; key
+        A[i+1] = A[i]
+        i = i-1
+    A[i+1] = key</code></pre>
+<h3 id="chapter-01-h5">手算例子<a class="heading-anchor" href="#chapter-01-h5" aria-label="链接到本节">#</a></h3>
+<p><code>[8, 2, 4, 9, 3, 6]</code></p>
+<pre><code data-language="text">插入 2: [2, 8, 4, 9, 3, 6]
+插入 4: [2, 4, 8, 9, 3, 6]
+插入 9: [2, 4, 8, 9, 3, 6]
+插入 3: [2, 3, 4, 8, 9, 6]
+插入 6: [2, 3, 4, 6, 8, 9]</code></pre>
+<h3 id="chapter-01-h6">循环不变式（loop invariant）<a class="heading-anchor" href="#chapter-01-h6" aria-label="链接到本节">#</a></h3>
+<p>在每次外层循环开始时，子数组 <code>A[0..j-1]</code> 由原来这些元素组成，且已经有序。正确性证明分三步：</p>
+<ol><li>初始化：<code>j=1</code> 时，单元素 <code>A[0]</code> 当然有序。</li><li>保持：移动比 <code>key</code> 大的元素，再将 <code>key</code> 放入空位，使有序前缀增长一位。</li><li>终止：<code>j=n</code> 时，整个数组 <code>A[0..n-1]</code> 有序。</li></ol>
+<blockquote>不变式不是“算法结束后成立的性质”，而是每次迭代边界都成立的性质。</blockquote>
+<h2 id="chapter-01-h7">4. RAM 计算模型<a class="heading-anchor" href="#chapter-01-h7" aria-label="链接到本节">#</a></h2>
+<p>课程分析默认 RAM（random-access machine，随机存取机）模型：算术、比较、赋值、数组访问等基本操作耗时是常数。这是抽象模型，不精确仿真 CPU 缓存、分支预测或磁盘 I/O。</p>
+<p>分析流程：</p>
+<ol><li>确定输入规模 <code>n</code>；</li><li>选择需计数的基本操作；</li><li>统计每行执行次数；</li><li>求和得到 <code>T(n)</code>；</li><li>去掉低阶项和常数因子，给出渐近界。</li></ol>
+<h2 id="chapter-01-h8">5. 最好、平均、最坏情况<a class="heading-anchor" href="#chapter-01-h8" aria-label="链接到本节">#</a></h2>
+<ul><li>最好情况（best case）：规模为 <code>n</code> 的所有输入中运行时间最小的。</li><li>最坏情况（worst case）：运行时间最大的。它给出不会被突破的上界。</li><li>平均情况（average case）：对输入分布取期望，必须说明概率模型。</li><li>期望时间（expected time）：还可以来自算法自身的随机性，不等于“输入平均”。</li></ul>
+<p>插入排序对已有序数组只做约 <code>n-1</code> 次比较，是 <code>Θ(n)</code>；对逆序数组，移动次数约为 <code>n(n-1)/2</code>，是 <code>Θ(n²)</code>。</p>
+<h3 id="chapter-01-h9">逆序对视角<a class="heading-anchor" href="#chapter-01-h9" aria-label="链接到本节">#</a></h3>
+<p>逆序对（inversion）是一对下标 <code>i&lt;j</code> 但 <code>A[i]&gt;A[j]</code> 的元素。插入排序的元素移动数与逆序数同阶，所以对“基本有序”数据很有优势。</p>
+<h2 id="chapter-01-h10">6. 分治与归并排序预览<a class="heading-anchor" href="#chapter-01-h10" aria-label="链接到本节">#</a></h2>
+<p>分治（divide and conquer）有三步：</p>
+<ol><li>Divide（分解）：将问题分成若干子问题；</li><li>Conquer（解决）：递归求解子问题；</li><li>Combine（合并）：将子问题的解合并成原问题的解。</li></ol>
+<p>归并排序将数组一分为二，分别排序，再用线性时间合并：</p>
+<p><code>T(n)=2T(n/2)+Θ(n)=Θ(n log n)</code>。</p>
+<p>与插入排序相比：归并排序渐近更快且稳定，但数组实现通常需要 <code>Θ(n)</code> 额外空间。</p>
+<h2 id="chapter-01-h11">一页速记<a class="heading-anchor" href="#chapter-01-h11" aria-label="链接到本节">#</a></h2>
+<ul><li>算法必须有明确输入/输出，对合法输入终止且正确。</li><li>循环不变式的证明三步：初始化、保持、终止。</li><li>分析得先定义输入规模和基本操作。</li><li>最坏分析提供保证；平均/期望分析需要概率模型。</li><li>插入排序：最好 <code>Θ(n)</code>，平均/最坏 <code>Θ(n²)</code>，原地、稳定。</li></ul>
+<h2 id="chapter-01-h12">易错点<a class="heading-anchor" href="#chapter-01-h12" aria-label="链接到本节">#</a></h2>
+<ul><li><code>O(n²)</code> 不表示“恰好是 <code>n²</code>”；这是渐近上界。</li><li>不能只数循环层数：循环界可能递减、倍增或相互依赖。</li><li>平均情况不是 <code>(best+worst)/2</code>。</li><li>递归算法的空间复杂度要计入调用栈。</li></ul>
+<h2 id="chapter-01-h13">自测<a class="heading-anchor" href="#chapter-01-h13" aria-label="链接到本节">#</a></h2>
+<ol><li>写出插入排序的循环不变式，并完成三步证明。</li><li>对 <code>[5,2,4,6,1,3]</code> 手算插入排序，统计移动次数。</li><li>区分“平均运行时间”与“随机化算法的期望运行时间”。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-01"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-02" data-chapter="chapter-02" data-title="02 渐近记号与递归式">
+    <div class="article-kicker"><span>02</span><span>02-渐近记号与递归式.md</span></div>
+    <h1 id="chapter-02">02 渐近记号与递归式</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_2(1).pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_2(1).pdf</a></p>
+<h2 id="chapter-02-h1">1. 渐近记号的目的<a class="heading-anchor" href="#chapter-02-h1" aria-label="链接到本节">#</a></h2>
+<p>渐近分析（asymptotic analysis）描述 <code>n → ∞</code> 时函数的增长速度，忽略有限个小输入、常数因子与低阶项。</p>
+<h3 id="chapter-02-h2">O 记号：渐近上界<a class="heading-anchor" href="#chapter-02-h2" aria-label="链接到本节">#</a></h3>
+<p><code>f(n) = O(g(n))</code> 当且仅当存在常数 <code>c&gt;0</code> 和 <code>n₀</code>，使得对所有 <code>n≥n₀</code>，有：</p>
+<p><code>0 ≤ f(n) ≤ c g(n)</code>。</p>
+<p>例：<code>3n²+10n+7 = O(n²)</code>。可取 <code>n≥1</code>，则 <code>3n²+10n+7 ≤ 20n²</code>。</p>
+<h3 id="chapter-02-h3">Ω 记号：渐近下界<a class="heading-anchor" href="#chapter-02-h3" aria-label="链接到本节">#</a></h3>
+<p><code>f(n) = Ω(g(n))</code> 当且仅当存在 <code>c&gt;0,n₀</code>，使 <code>0 ≤ c g(n) ≤ f(n)</code> 对所有 <code>n≥n₀</code> 成立。</p>
+<h3 id="chapter-02-h4">Θ 记号：渐近紧界<a class="heading-anchor" href="#chapter-02-h4" aria-label="链接到本节">#</a></h3>
+<p><code>f(n) = Θ(g(n))</code> 当且仅当 <code>f(n)=O(g(n))</code> 且 <code>f(n)=Ω(g(n))</code>。也就是存在正常数 <code>c₁,c₂,n₀</code>，使：</p>
+<p><code>0 ≤ c₁g(n) ≤ f(n) ≤ c₂g(n)</code>。</p>
+<h3 id="chapter-02-h5">o 与 ω：非紧界<a class="heading-anchor" href="#chapter-02-h5" aria-label="链接到本节">#</a></h3>
+<ul><li><code>f(n)=o(g(n))</code>：对任意 <code>c&gt;0</code>，最终都有 <code>f(n)&lt;cg(n)</code>；等价地，若极限存在，<code>lim f/g = 0</code>。</li><li><code>f(n)=ω(g(n))</code>：对任意 <code>c&gt;0</code>，最终都有 <code>f(n)&gt;cg(n)</code>；常见等价是 <code>lim f/g = ∞</code>。</li></ul>
+<p>例：<code>n = o(n log n)</code>，但 <code>n log n</code> 不是 <code>o(n log n)</code>；它是 <code>Θ(n log n)</code>。</p>
+<h2 id="chapter-02-h6">2. 记号之间的关系<a class="heading-anchor" href="#chapter-02-h6" aria-label="链接到本节">#</a></h2>
+<ul><li>自反性：<code>f=Θ(f)</code>、<code>f=O(f)</code>、<code>f=Ω(f)</code>。</li><li>对称性：<code>f=Θ(g) ⇔ g=Θ(f)</code>。</li><li>转置对称：<code>f=O(g) ⇔ g=Ω(f)</code>；<code>f=o(g) ⇔ g=ω(f)</code>。</li><li>传递性：<code>f=O(g)</code> 且 <code>g=O(h)</code> 则 <code>f=O(h)</code>。</li></ul>
+<p><span class="note-tag tag-PITFALL">PITFALL</span> <code>O</code> 与 <code>Ω</code> 描述函数的界，不是自动对应“最坏”与“最好”。可以说最坏运行时间是 <code>Θ(n²)</code>，也可以说它是 <code>O(n³)</code>，只是后者不紧。</p>
+<h2 id="chapter-02-h7">3. 常见增长率<a class="heading-anchor" href="#chapter-02-h7" aria-label="链接到本节">#</a></h2>
+<p>从慢到快：</p>
+<p><code>1 &lt; log log n &lt; log n &lt; ( log n )^k &lt; n^ε &lt; n &lt; n log n &lt; n² &lt; n³ &lt; cⁿ &lt; n! &lt; nⁿ</code></p>
+<p>其中 <code>k&gt;0</code>、<code>ε&gt;0</code>、<code>c&gt;1</code>。对数的底在渐近记号中通常只差常数因子，因为 <code>logₐn = logₑn / logₑa</code>。</p>
+<h3 id="chapter-02-h8">常用等式<a class="heading-anchor" href="#chapter-02-h8" aria-label="链接到本节">#</a></h3>
+<ul><li><code>log(ab)=log a+log b</code></li><li><code>log(a^k)=k log a</code></li><li><code>∑ᵢ₌₁ⁿ i = n(n+1)/2 = Θ(n²)</code></li><li><code>∑ᵢ₌₀ᵏ rⁱ = (r^(k+1)-1)/(r-1)</code>，<code>r≠1</code></li><li><code>∑ᵢ₌₁ⁿ 1/i = Hₙ = Θ(log n)</code></li><li><code>n! = √(2πn)(n/e)^n(1+o(1))</code>（Stirling 公式）</li></ul>
+<h3 id="chapter-02-h9">Fibonacci 数<a class="heading-anchor" href="#chapter-02-h9" aria-label="链接到本节">#</a></h3>
+<p><code>F₀=0, F₁=1, Fₙ=Fₙ₋₁+Fₙ₋₂</code>。它按黄金比 <code>φ=(1+√5)/2</code> 的幂增长：<code>Fₙ=Θ(φⁿ)</code>。这个性质会出现在 Fibonacci 堆度数界的证明中。</p>
+<h2 id="chapter-02-h10">4. 递归式（recurrence）<a class="heading-anchor" href="#chapter-02-h10" aria-label="链接到本节">#</a></h2>
+<p>递归算法的运行时间常用递归式表示。例如归并排序：</p>
+<p><code>T(n)=2T(n/2)+Θ(n)</code>。</p>
+<p>课件给出三类主要方法。</p>
+<h3 id="chapter-02-h11">4.1 代入法（substitution method）<a class="heading-anchor" href="#chapter-02-h11" aria-label="链接到本节">#</a></h3>
+<p>步骤：</p>
+<ol><li>猜测紧界；</li><li>使用归纳假设代回递归式；</li><li>选择合适常数，完成上界/下界证明；</li><li>处理基本情况。</li></ol>
+<p>例：<code>T(n)=2T(⌊n/2⌋)+n</code>，猜 <code>T(n)=O(n log n)</code>。假设对更小规模有 <code>T(k)≤ck log k</code>，代入后可得 <code>T(n)≤cn log n</code> 附近的界。</p>
+<p><span class="note-tag tag-PITFALL">PITFALL</span> 猜 <code>T(n)≤cn</code> 有时会因常数项无法抵消而归纳失败。可以“加强假设”，如猜 <code>T(n)≤cn-d</code>，留出松弛项。</p>
+<h3 id="chapter-02-h12">4.2 递归树（recursion tree）<a class="heading-anchor" href="#chapter-02-h12" aria-label="链接到本节">#</a></h3>
+<p>将每次递归调用的非递归代价放在树节点上，先求每层代价，再求所有层总和。</p>
+<p>例：<code>T(n)=2T(n/2)+n</code></p>
+<ul><li>第 0 层代价 <code>n</code>；</li><li>第 1 层两个子问题，总代价仍为 <code>n</code>；</li><li>共 <code>log₂n</code> 层；</li><li>总代价 <code>Θ(n log n)</code>。</li></ul>
+<p>例：<code>T(n)=T(n/3)+T(2n/3)+n</code>不符合经典 Master 定理的同规模子问题形式，但递归树显示每层总代价约为 <code>n</code>，树高 <code>Θ(log n)</code>，所以为 <code>Θ(n log n)</code>。</p>
+<h3 id="chapter-02-h13">4.3 主方法（master method）<a class="heading-anchor" href="#chapter-02-h13" aria-label="链接到本节">#</a></h3>
+<p>适用于：<code>T(n)=aT(n/b)+f(n)</code>，其中 <code>a≥1,b&gt;1</code>。比较 <code>f(n)</code> 与临界函数 <code>n^(logₑa)</code>。</p>
+<div class="table-wrap"><table><thead><tr><th>情况</th><th>条件（相差多项式因子）</th><th>结果</th></tr></thead><tbody><tr><td>1</td><td><code>f(n)=O(n^(logₑa-ε))</code></td><td><code>T(n)=Θ(n^(logₑa))</code></td></tr><tr><td>2</td><td><code>f(n)=Θ(n^(logₑa) log^k n)</code></td><td><code>T(n)=Θ(n^(logₑa) log^(k+1)n)</code></td></tr><tr><td>3</td><td><code>f(n)=Ω(n^(logₑa+ε))</code>，且满足正则条件</td><td><code>T(n)=Θ(f(n))</code></td></tr></tbody></table></div>
+<p>经典 CLRS 第三版的简化情况 2 常写为 <code>f(n)=Θ(n^(logₑa))</code>，对应 <code>k=0</code>。</p>
+<h4 id="chapter-02-h14">例子<a class="heading-anchor" href="#chapter-02-h14" aria-label="链接到本节">#</a></h4>
+<ul><li><code>T(n)=9T(n/3)+n</code>：<code>n^(log₃9)=n²</code>，<code>f(n)=n</code> 更小，得 <code>Θ(n²)</code>。</li><li><code>T(n)=T(2n/3)+1</code>：<code>a=1,b=3/2</code>，临界函数为 1，得 <code>Θ(log n)</code>。</li><li><code>T(n)=3T(n/4)+n log n</code>：临界函数 <code>n^(log₄3)</code>，<code>f(n)</code> 多项式地更大，检查正则条件后得 <code>Θ(n log n)</code>。</li></ul>
+<h4 id="chapter-02-h15">不能直接用 Master 定理的情况<a class="heading-anchor" href="#chapter-02-h15" aria-label="链接到本节">#</a></h4>
+<ul><li>子问题规模不同，如 <code>T(n)=T(n/3)+T(2n/3)+n</code>；</li><li>不是常数个子问题；</li><li><code>f(n)</code> 与临界函数差距不是多项式级，且不在所用版本的情况 2 内；</li><li>情况 3 的正则条件 <code>a f(n/b) ≤ c f(n)</code>（某个 <code>c&lt;1</code>）不成立。</li></ul>
+<h2 id="chapter-02-h16">一页速记<a class="heading-anchor" href="#chapter-02-h16" aria-label="链接到本节">#</a></h2>
+<ul><li><code>O</code> 上界，<code>Ω</code> 下界，<code>Θ</code> 紧界，<code>o/ω</code> 严格非紧界。</li><li>先比较增长率，再挑常数 <code>c,n₀</code>。</li><li>递归式三工具：代入法做证明，递归树找直觉，Master 定理快速分类。</li><li>Master 定理先算 <code>n^(logₑa)</code>，再与 <code>f(n)</code> 比较。</li></ul>
+<h2 id="chapter-02-h17">易错点<a class="heading-anchor" href="#chapter-02-h17" aria-label="链接到本节">#</a></h2>
+<ul><li><code>f=O(g)</code> 可以同时有 <code>f=O(h)</code>；<code>O</code> 不是唯一的“等于”。</li><li>忽略递归的基本情况可能让证明在小 <code>n</code> 上失效。</li><li>主定理情况 3 不只要“<code>f</code> 更大”，还要检查正则条件。</li><li><code>T(n)=T(n-1)+n</code> 不能套经典 Master 定理，展开后是 <code>Θ(n²)</code>。</li></ul>
+<h2 id="chapter-02-h18">自测<a class="heading-anchor" href="#chapter-02-h18" aria-label="链接到本节">#</a></h2>
+<ol><li>用定义证明 <code>6n³+2n = Θ(n³)</code>。</li><li>求 <code>T(n)=4T(n/2)+n</code>、<code>T(n)=2T(n/2)+n log n</code>、<code>T(n)=T(n/2)+n</code> 的紧界。</li><li>画递归树分析 <code>T(n)=3T(n/4)+n²</code>。</li><li>说明为什么 <code>n log n = o(n^(1+ε))</code> 对任意常数 <code>ε&gt;0</code> 成立。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-02"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-03" data-chapter="chapter-03" data-title="03 比较排序">
+    <div class="article-kicker"><span>03</span><span>03-比较排序.md</span></div>
+    <h1 id="chapter-03">03 比较排序</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_3.pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_3.pdf</a></p>
+<h2 id="chapter-03-h1">1. 评价排序算法的维度<a class="heading-anchor" href="#chapter-03-h1" aria-label="链接到本节">#</a></h2>
+<ul><li>时间复杂度：通常关心比较次数和元素移动次数。</li><li>空间复杂度：是否需要与 <code>n</code> 成比例的辅助数组。</li><li>稳定性（stability）：相等键值的记录排序后是否保留原相对次序。</li><li>原地性（in-place）：数组主体是否只用 <code>O(1)</code> 辅助存储；递归栈通常另行说明。</li><li>自适应性：输入已经部分有序时是否更快。</li></ul>
+<p>稳定性只在元素除排序键外还有附加信息时有意义。例如先按姓名排序，再稳定地按班级排序，同班内仍保持姓名顺序。</p>
+<h2 id="chapter-03-h2">2. 简单排序<a class="heading-anchor" href="#chapter-03-h2" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-03-h3">2.1 插入排序（insertion sort）<a class="heading-anchor" href="#chapter-03-h3" aria-label="链接到本节">#</a></h3>
+<p>思想：维护有序前缀，把新元素插到正确位置。</p>
+<ul><li>最好 <code>Θ(n)</code>，平均/最坏 <code>Θ(n²)</code>；</li><li>原地，稳定；</li><li>适合小数组、基本有序数据，也常用于高级排序的小区间收尾。</li></ul>
+<h3 id="chapter-03-h4">2.2 选择排序（selection sort）<a class="heading-anchor" href="#chapter-03-h4" aria-label="链接到本节">#</a></h3>
+<p>思想：在未排序后缀中找最小元素，与后缀第一个元素交换。</p>
+<pre><code data-language="text">for i = 0 .. n-2
+    smallest = i
+    for j = i+1 .. n-1
+        if A[j] &lt; A[smallest]: smallest = j
+    swap A[i], A[smallest]</code></pre>
+<ul><li>无论输入如何，比较次数都是 <code>n(n-1)/2</code>，即 <code>Θ(n²)</code>；</li><li>交换只有 <code>O(n)</code> 次，适合“写操作昂贵”的特殊场景；</li><li>原地，标准实现不稳定。</li></ul>
+<p>不稳定反例：<code>[2a, 2b, 1]</code> 第一轮交换 <code>2a</code> 与 <code>1</code>，得 <code>[1,2b,2a]</code>，两个 2 的相对次序改变。</p>
+<h3 id="chapter-03-h5">2.3 冒泡排序（bubble sort）<a class="heading-anchor" href="#chapter-03-h5" aria-label="链接到本节">#</a></h3>
+<p>思想：反复比较相邻元素，若逆序则交换，每轮将当前最大元素“冒”到右端。</p>
+<ul><li>平均/最坏 <code>Θ(n²)</code>；</li><li>加入“本轮是否交换”标志后，已有序输入可达 <code>Θ(n)</code>；</li><li>原地，仅在严格大于时交换则稳定。</li></ul>
+<h3 id="chapter-03-h6">2.4 希尔排序（Shellsort）<a class="heading-anchor" href="#chapter-03-h6" aria-label="链接到本节">#</a></h3>
+<p>思想：先对间隔为 <code>gap</code> 的子序列做插入排序，逐步缩小间隔，最后 <code>gap=1</code>。这使远距离元素能较早移动。</p>
+<ul><li>原地，不稳定；</li><li>复杂度高度依赖增量序列，不能脱离 gap 规则笼统地说是某个唯一复杂度；</li><li>课件总结表给出常见经验量级约 <code>O(n^(4/3))</code>，应连同所用增量序列理解。</li></ul>
+<h2 id="chapter-03-h7">3. 归并排序（merge sort）<a class="heading-anchor" href="#chapter-03-h7" aria-label="链接到本节">#</a></h2>
+<p>将数组对半分解，递归排序左右两半，再合并两个有序序列。</p>
+<pre><code data-language="text">MERGE-SORT(A, l, r)
+if l &gt;= r: return
+m = floor((l+r)/2)
+MERGE-SORT(A, l, m)
+MERGE-SORT(A, m+1, r)
+MERGE(A, l, m, r)</code></pre>
+<p>合并时用两个指针，每次取两个当前元素中较小者。若相等时优先取左半的元素，就能保持稳定。</p>
+<ul><li>时间：最好/平均/最坏均为 <code>Θ(n log n)</code>；</li><li>空间：数组标准实现 <code>Θ(n)</code> 辅助空间，递归栈 <code>Θ(log n)</code>；</li><li>稳定；适合链表和外部排序。</li></ul>
+<h2 id="chapter-03-h8">4. 堆与堆排序<a class="heading-anchor" href="#chapter-03-h8" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-03-h9">4.1 堆的数组表示<a class="heading-anchor" href="#chapter-03-h9" aria-label="链接到本节">#</a></h3>
+<p>最大堆（max-heap）是一棵近似完全二叉树，每个节点的键不小于其孩子。用 0 起始数组表示时：</p>
+<ul><li><code>parent(i)=floor((i-1)/2)</code></li><li><code>left(i)=2i+1</code></li><li><code>right(i)=2i+2</code></li></ul>
+<p>课件使用 1 起始时：<code>parent(i)=⌊i/2⌋</code>、<code>left=2i</code>、<code>right=2i+1</code>。</p>
+<h3 id="chapter-03-h10">4.2 MAX-HEAPIFY<a class="heading-anchor" href="#chapter-03-h10" aria-label="链接到本节">#</a></h3>
+<p>前提：节点 <code>i</code> 的左右子树已是最大堆，但 <code>i</code> 可能违反堆性质。将 <code>i</code> 与较大的孩子交换，并向下继续修复。</p>
+<p>堆高是 <code>Θ(log n)</code>，所以 <code>MAX-HEAPIFY</code> 是 <code>O(log n)</code>。</p>
+<h3 id="chapter-03-h11">4.3 BUILD-MAX-HEAP 为什么是 <code>O(n)</code><a class="heading-anchor" href="#chapter-03-h11" aria-label="链接到本节">#</a></h3>
+<p>从最后一个非叶节点逆序调用 <code>MAX-HEAPIFY</code>。不能简单地说有 <code>n</code> 个节点，每个 <code>O(log n)</code>，因为大多数节点很靠近叶子，修复高度很小。</p>
+<p><code>T(n) ≤ n ∑ₕ₌₀^∞ (h/2^(h+1)) = O(n)</code>。</p>
+<h3 id="chapter-03-h12">4.4 堆排序（heapsort）<a class="heading-anchor" href="#chapter-03-h12" aria-label="链接到本节">#</a></h3>
+<ol><li>建立最大堆；</li><li>把根（当前最大值）与堆末元素交换；</li><li>缩小堆范围，对根调用 <code>MAX-HEAPIFY</code>；</li><li>重复到堆空。</li></ol>
+<ul><li>最好/平均/最坏均 <code>Θ(n log n)</code>；</li><li>原地，不稳定；</li><li>与归并排序相比节省辅助数组，但实际缓存局部性常不如快排。</li></ul>
+<h3 id="chapter-03-h13">4.5 优先队列操作<a class="heading-anchor" href="#chapter-03-h13" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>最大优先队列操作</th><th>时间</th></tr></thead><tbody><tr><td><code>MAXIMUM</code></td><td><code>O(1)</code></td></tr><tr><td><code>EXTRACT-MAX</code></td><td><code>O(log n)</code></td></tr><tr><td><code>INCREASE-KEY</code></td><td><code>O(log n)</code></td></tr><tr><td><code>INSERT</code></td><td><code>O(log n)</code></td></tr></tbody></table></div>
+<p><code>INCREASE-KEY</code> 是向上修复，<code>MAX-HEAPIFY</code> 通常是向下修复，不要混淆。</p>
+<h2 id="chapter-03-h14">5. 快速排序（quicksort）<a class="heading-anchor" href="#chapter-03-h14" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-03-h15">5.1 分区思想<a class="heading-anchor" href="#chapter-03-h15" aria-label="链接到本节">#</a></h3>
+<p>选择一个主元（pivot），调整区间，使小于等于主元的元素在左，大于主元的在右，再递归处理两边。</p>
+<p>Lomuto 分区不变式（主元取 <code>A[r]</code>）：扫描到 <code>j</code> 时，</p>
+<ul><li><code>A[p..i] ≤ pivot</code>；</li><li><code>A[i+1..j-1] &gt; pivot</code>；</li><li><code>A[j..r-1]</code> 尚未处理。</li></ul>
+<p>分区一次为 <code>Θ(n)</code>。</p>
+<h3 id="chapter-03-h16">5.2 复杂度<a class="heading-anchor" href="#chapter-03-h16" aria-label="链接到本节">#</a></h3>
+<ul><li>最好/均衡分割：<code>T(n)=2T(n/2)+Θ(n)=Θ(n log n)</code>。</li><li>即使每次是 <code>1:9</code> 这样的常数比例分割，深度仍是 <code>Θ(log n)</code>，总时间仍 <code>Θ(n log n)</code>。</li><li>最坏分割 <code>0:n-1</code>：<code>T(n)=T(n-1)+Θ(n)=Θ(n²)</code>。</li><li>随机选主元后，期望时间 <code>Θ(n log n)</code>，但最坏仍是 <code>Θ(n²)</code>。</li></ul>
+<p>快排通常原地且常数小，标准分区不稳定。递归空间期望 <code>O(log n)</code>，最坏 <code>O(n)</code>。工程实现可先递归较小区间，用循环处理较大区间，将额外栈空间压到 <code>O(log n)</code>。</p>
+<h3 id="chapter-03-h17">重复元素很多时<a class="heading-anchor" href="#chapter-03-h17" aria-label="链接到本节">#</a></h3>
+<p>二向分区可能反复处理等于主元的元素。三向分区将区间分成 <code>&lt; pivot</code>、<code>= pivot</code>、<code>&gt; pivot</code>，对重复键更稳健。</p>
+<h2 id="chapter-03-h18">6. 对比表<a class="heading-anchor" href="#chapter-03-h18" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>算法</th><th>最好</th><th>平均/期望</th><th>最坏</th><th>辅助空间</th><th>稳定</th><th>原地</th></tr></thead><tbody><tr><td>插入</td><td><code>Θ(n)</code></td><td><code>Θ(n²)</code></td><td><code>Θ(n²)</code></td><td><code>O(1)</code></td><td>是</td><td>是</td></tr><tr><td>选择</td><td><code>Θ(n²)</code></td><td><code>Θ(n²)</code></td><td><code>Θ(n²)</code></td><td><code>O(1)</code></td><td>否</td><td>是</td></tr><tr><td>冒泡（带提前终止）</td><td><code>Θ(n)</code></td><td><code>Θ(n²)</code></td><td><code>Θ(n²)</code></td><td><code>O(1)</code></td><td>是</td><td>是</td></tr><tr><td>归并</td><td><code>Θ(n log n)</code></td><td><code>Θ(n log n)</code></td><td><code>Θ(n log n)</code></td><td><code>Θ(n)</code></td><td>是</td><td>否（数组标准实现）</td></tr><tr><td>堆排序</td><td><code>Θ(n log n)</code></td><td><code>Θ(n log n)</code></td><td><code>Θ(n log n)</code></td><td><code>O(1)</code></td><td>否</td><td>是</td></tr><tr><td>随机快排</td><td><code>Θ(n log n)</code></td><td><code>Θ(n log n)</code></td><td><code>Θ(n²)</code></td><td>期望 <code>O(log n)</code> 栈</td><td>否</td><td>通常是</td></tr></tbody></table></div>
+<h2 id="chapter-03-h19">一页速记<a class="heading-anchor" href="#chapter-03-h19" aria-label="链接到本节">#</a></h2>
+<ul><li>“快”不只看渐近界：还看缓存、稳定性、空间和数据分布。</li><li><code>BUILD-HEAP=O(n)</code>，不是 <code>O(n log n)</code>。</li><li>归并的代价是辅助空间；堆排序的代价是缓存局部性；快排的代价是最坏界。</li><li>随机化快排改善期望性能，不消除最坏情况。</li></ul>
+<h2 id="chapter-03-h20">自测<a class="heading-anchor" href="#chapter-03-h20" aria-label="链接到本节">#</a></h2>
+<ol><li>用堆 <code>[4,1,3,2,16,9,10,14,8,7]</code> 手算 <code>BUILD-MAX-HEAP</code>。</li><li>写出 Lomuto 分区的循环不变式，并解释为什么最后一次交换后主元就位。</li><li>为什么恒定 <code>1:9</code> 分割仍是 <code>Θ(n log n)</code>？</li><li>构造选择排序不稳定的最小反例。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-03"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-04" data-chapter="chapter-04" data-title="04 线性时间排序与选择">
+    <div class="article-kicker"><span>04</span><span>04-线性时间排序与选择.md</span></div>
+    <h1 id="chapter-04">04 线性时间排序与选择</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_4_1.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_4_1.pdf</a> 与 <a href="./Algorithm_2026__Topic_4_2.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_4_2.pdf</a></p>
+<h2 id="chapter-04-h1">1. 比较排序的下界<a class="heading-anchor" href="#chapter-04-h1" aria-label="链接到本节">#</a></h2>
+<p>对于只通过两元素比较来确定次序的算法，可用决策树（decision tree）建模：</p>
+<ul><li>每个内部节点是一次比较；</li><li>两条边是比较的两种结果；</li><li>每个叶子对应一种输入排列的最终次序。</li></ul>
+<p><code>n</code> 个不同元素有 <code>n!</code> 种排列，所以决策树至少有 <code>n!</code> 个叶子。高度为 <code>h</code> 的二叉树最多有 <code>2^h</code> 个叶子，因此：</p>
+<p><code>2^h ≥ n!  ⇒  h ≥ log₂(n!) = Ω(n log n)</code>。</p>
+<p>结论：任何比较排序在最坏情况都需要 <code>Ω(n log n)</code> 次比较。计数、基数、桶排序能达线性时间，是因为它们使用了键的取值范围或数位等额外信息，不属于纯比较排序。</p>
+<h2 id="chapter-04-h2">2. 计数排序（counting sort）<a class="heading-anchor" href="#chapter-04-h2" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-04-h3">适用条件<a class="heading-anchor" href="#chapter-04-h3" aria-label="链接到本节">#</a></h3>
+<p>输入键是 <code>[0,k]</code> 范围的整数，且 <code>k</code> 不能远大于 <code>n</code>。</p>
+<h3 id="chapter-04-h4">三步<a class="heading-anchor" href="#chapter-04-h4" aria-label="链接到本节">#</a></h3>
+<ol><li>计数：<code>C[v]</code> 记录键 <code>v</code> 出现次数。</li><li>前缀和：将 <code>C[v]</code> 改为“小于等于 <code>v</code> 的元素个数”，因而得到 <code>v</code> 在输出中的最后位置。</li><li>反向扫描输入，把元素放到输出 <code>B</code> 的目标位置，再将对应计数减 1。</li></ol>
+<p>为什么要反向扫描？若后出现的相等键先放到后面的槽位，早出现的元素最终仍在前，从而保持稳定。</p>
+<h3 id="chapter-04-h5">例子<a class="heading-anchor" href="#chapter-04-h5" aria-label="链接到本节">#</a></h3>
+<p><code>A=[2a,5,3,0,2b,3]</code>，计数为 <code>[1,0,2,2,0,1]</code>，前缀和为 <code>[1,1,3,5,5,6]</code>。稳定输出为 <code>[0,2a,2b,3,3,5]</code>。</p>
+<ul><li>时间：<code>Θ(n+k)</code>；</li><li>空间：<code>Θ(n+k)</code>（课件中的稳定版）；</li><li>稳定，非比较排序。</li></ul>
+<p><span class="note-tag tag-PITFALL">PITFALL</span> 如果 <code>n=100</code>而键范围是 <code>[0,10^9]</code>，直接分配计数数组并不合适。</p>
+<h2 id="chapter-04-h6">3. 基数排序（radix sort）<a class="heading-anchor" href="#chapter-04-h6" aria-label="链接到本节">#</a></h2>
+<p>将键拆成 <code>d</code> 个数位，按从最低有效位（LSD）到最高有效位（MSD）的顺序，对每一位使用稳定排序。</p>
+<h3 id="chapter-04-h7">为什么内层必须稳定<a class="heading-anchor" href="#chapter-04-h7" aria-label="链接到本节">#</a></h3>
+<p>处理更高位时，相同高位的元素必须保留已经按低位建立的顺序。若内层不稳定，低位顺序会被破坏。</p>
+<p>例（十进制）：<code>[329,457,657,839,436,720,355]</code></p>
+<pre><code data-language="text">按个位: 720,355,436,457,657,329,839
+按十位: 720,329,436,839,355,457,657
+按百位: 329,355,436,457,657,720,839</code></pre>
+<p>若每位取值范围为 <code>[0,k]</code>，内层用计数排序：</p>
+<ul><li>时间 <code>Θ(d(n+k))</code>；</li><li>当 <code>d</code> 为常数且 <code>k=O(n)</code> 时是线性时间。</li></ul>
+<h2 id="chapter-04-h8">4. 桶排序（bucket sort）<a class="heading-anchor" href="#chapter-04-h8" aria-label="链接到本节">#</a></h2>
+<p>典型设定：<code>n</code> 个数独立均匀分布在 <code>[0,1)</code>。</p>
+<ol><li>建立 <code>n</code> 个桶；</li><li>将 <code>x</code> 放入第 <code>⌊nx⌋</code> 个桶；</li><li>分别对每个桶内排序（可用插入排序）；</li><li>按顺序连接所有桶。</li></ol>
+<ul><li>均匀分布假设下，期望时间 <code>Θ(n)</code>；</li><li>如果所有元素落在同一桶，且桶内用插入排序，最坏为 <code>Θ(n²)</code>；</li><li>线性期望界依赖分布假设，不是无条件保证。</li></ul>
+<h2 id="chapter-04-h9">5. 顺序统计量（order statistic）<a class="heading-anchor" href="#chapter-04-h9" aria-label="链接到本节">#</a></h2>
+<p>第 <code>i</code> 小元素称为第 <code>i</code> 个顺序统计量。最小值是第 1 小，最大值是第 <code>n</code> 小，中位数是中间秩附近的元素。</p>
+<h3 id="chapter-04-h10">5.1 最小值与最大值<a class="heading-anchor" href="#chapter-04-h10" aria-label="链接到本节">#</a></h3>
+<ul><li>单独找最小值：恰需 <code>n-1</code> 次比较。</li><li>分别找最小和最大：<code>2n-2</code> 次左右。</li><li>成对处理：每对先互比，较小者只与当前最小比，较大者只与当前最大比，最多约 <code>3⌊n/2⌋-2</code> 次。</li></ul>
+<h3 id="chapter-04-h11">5.2 随机选择（RANDOMIZED-SELECT / Quickselect）<a class="heading-anchor" href="#chapter-04-h11" aria-label="链接到本节">#</a></h3>
+<p>与快排使用同样的随机分区，但只递归到包含目标秩的一侧。</p>
+<pre><code data-language="text">RANDOMIZED-SELECT(A, p, r, i)  // i 从 1 起算
+if p == r: return A[p]
+q = RANDOMIZED-PARTITION(A, p, r)
+k = q-p+1                       // pivot 在当前区间的秩
+if i == k: return A[q]
+if i &lt; k: return RANDOMIZED-SELECT(A, p, q-1, i)
+return RANDOMIZED-SELECT(A, q+1, r, i-k)</code></pre>
+<ul><li>期望时间 <code>Θ(n)</code>；</li><li>最坏时间 <code>Θ(n²)</code>；</li><li>与快排的根本区别：快排递归两边，Quickselect 只进入一边。</li></ul>
+<h3 id="chapter-04-h12">5.3 最坏线性时间选择（SELECT）<a class="heading-anchor" href="#chapter-04-h12" aria-label="链接到本节">#</a></h3>
+<p>又称 median of medians（中位数的中位数）：</p>
+<ol><li>将 <code>n</code> 个元素每 5 个分一组；</li><li>对每个小组排序，取小组中位数；</li><li>递归地找这些中位数的中位数 <code>x</code>；</li><li>用 <code>x</code> 做主元分区；</li><li>只在包含目标秩的一侧递归。</li></ol>
+<p>为什么是 5 个一组？它保证主元两边都有足够多的元素。除去边界组，至少约 <code>3n/10</code> 个元素不小于 <code>x</code>，也至少约 <code>3n/10</code> 个不大于 <code>x</code>。因而较大的递归侧最多约 <code>7n/10</code> 个元素：</p>
+<p><code>T(n) ≤ T(⌈n/5⌉) + T(7n/10+6) + O(n) = O(n)</code>。</p>
+<p>它在渐近上给出最坏线性保证，但常数较大，实际中常用随机 Quickselect 或混合策略。</p>
+<h2 id="chapter-04-h13">6. 选型表<a class="heading-anchor" href="#chapter-04-h13" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>问题</th><th>方法</th><th>时间</th><th>前提/代价</th></tr></thead><tbody><tr><td>小范围整数排序</td><td>计数排序</td><td><code>Θ(n+k)</code></td><td>需键范围</td></tr><tr><td>固定数位键</td><td>基数排序</td><td><code>Θ(d(n+k))</code></td><td>内层必须稳定</td></tr><tr><td>近似均匀实数</td><td>桶排序</td><td>期望 <code>Θ(n)</code></td><td>依赖分布</td></tr><tr><td>第 <code>i</code> 小，重视实用性</td><td>随机 Quickselect</td><td>期望 <code>Θ(n)</code></td><td>最坏 <code>Θ(n²)</code></td></tr><tr><td>第 <code>i</code> 小，必须最坏线性</td><td>median of medians</td><td>最坏 <code>Θ(n)</code></td><td>常数较大</td></tr></tbody></table></div>
+<h2 id="chapter-04-h14">易错点<a class="heading-anchor" href="#chapter-04-h14" aria-label="链接到本节">#</a></h2>
+<ul><li><code>Ω(n log n)</code> 只限制比较排序，不是所有排序的无条件下界。</li><li>计数排序的稳定实现要反向遍历原数组。</li><li>LSD 基数排序的内层排序不稳定会破坏已排好的低位。</li><li>Quickselect 右侧递归时目标秩要改为 <code>i-k</code>。</li></ul>
+<h2 id="chapter-04-h15">自测<a class="heading-anchor" href="#chapter-04-h15" aria-label="链接到本节">#</a></h2>
+<ol><li>用决策树说明 3 个不同元素的比较排序最坏至少需几次比较。</li><li>对 <code>[2,5,3,0,2,3,0,3]</code> 完整手算计数排序的 <code>C</code> 数组。</li><li>说明 median-of-medians 如何保证较大的递归子问题不超过约 <code>7n/10</code>。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-04"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-05" data-chapter="chapter-05" data-title="05 高级数据结构 I：搜索树与增广">
+    <div class="article-kicker"><span>05</span><span>05-高级数据结构-I.md</span></div>
+    <h1 id="chapter-05">05 高级数据结构 I：搜索树与增广</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_5_1.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_5_1.pdf</a></p>
+<h2 id="chapter-05-h1">1. 二叉搜索树（BST）<a class="heading-anchor" href="#chapter-05-h1" aria-label="链接到本节">#</a></h2>
+<p>二叉搜索树（binary search tree）对每个节点 <code>x</code> 满足：</p>
+<ul><li>左子树中的键不大于 <code>x.key</code>；</li><li>右子树中的键不小于 <code>x.key</code>；</li><li>具体如何放置重复键必须在实现中统一规定。</li></ul>
+<p>中序遍历（inorder traversal）会按非降顺序输出全部键。</p>
+<h3 id="chapter-05-h2">基本操作<a class="heading-anchor" href="#chapter-05-h2" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>操作</th><th>思路</th><th>时间</th></tr></thead><tbody><tr><td><code>SEARCH(k)</code></td><td><code>k</code> 小则左走，大则右走</td><td><code>O(h)</code></td></tr><tr><td><code>MINIMUM</code></td><td>一直走左孩子</td><td><code>O(h)</code></td></tr><tr><td><code>MAXIMUM</code></td><td>一直走右孩子</td><td><code>O(h)</code></td></tr><tr><td><code>SUCCESSOR</code></td><td>右子树的最小值，或最低的“从左边进入”祖先</td><td><code>O(h)</code></td></tr><tr><td><code>PREDECESSOR</code></td><td>与后继对称</td><td><code>O(h)</code></td></tr><tr><td><code>INSERT</code></td><td>按搜索路径找到空位</td><td><code>O(h)</code></td></tr><tr><td><code>DELETE</code></td><td>根据孩子数分情况</td><td><code>O(h)</code></td></tr></tbody></table></div>
+<p><code>h</code> 是树高。平衡时 <code>h=Θ(log n)</code>，但顺序插入可以使普通 BST 退化为链，<code>h=Θ(n)</code>。</p>
+<h3 id="chapter-05-h3">后继（successor）<a class="heading-anchor" href="#chapter-05-h3" aria-label="链接到本节">#</a></h3>
+<p>节点 <code>x</code> 的后继是严格大于 <code>x.key</code> 的最小键。</p>
+<ol><li>若 <code>x</code> 有右子树，后继是右子树的最小节点。</li><li>否则向上找第一个祖先 <code>y</code>，使 <code>x</code> 在 <code>y</code> 的左子树中。</li><li>最大键没有后继，返回 <code>NIL</code>。</li></ol>
+<h3 id="chapter-05-h4">删除的三种形态<a class="heading-anchor" href="#chapter-05-h4" aria-label="链接到本节">#</a></h3>
+<ul><li>0 个孩子：直接移除。</li><li>1 个孩子：用唯一孩子接管位置。</li><li>2 个孩子：用右子树的最小节点（后继）替代它。该后继不可能有左孩子，所以剩下的结构删除落入前两种情况。</li></ul>
+<h2 id="chapter-05-h5">2. 红黑树（red-black tree）<a class="heading-anchor" href="#chapter-05-h5" aria-label="链接到本节">#</a></h2>
+<p>红黑树是一种近似平衡 BST。节点除键外还有颜色字段。</p>
+<h3 id="chapter-05-h6">五条性质<a class="heading-anchor" href="#chapter-05-h6" aria-label="链接到本节">#</a></h3>
+<ol><li>每个节点是红色或黑色。</li><li>根节点是黑色。</li><li>每个叶子哨兵 <code>NIL</code> 是黑色。</li><li>红节点的两个孩子都是黑色，即不存在相邻红节点。</li><li>从任一节点到其后代 <code>NIL</code> 叶子的所有简单路径含相同数量的黑节点。</li></ol>
+<p>黑高（black-height, <code>bh(x)</code>）是从 <code>x</code> 向下到任一 <code>NIL</code> 路径上的黑节点数（通常不计 <code>x</code> 本身，但要与教材约定保持一致）。</p>
+<h3 id="chapter-05-h7">为什么高度是 <code>O(log n)</code><a class="heading-anchor" href="#chapter-05-h7" aria-label="链接到本节">#</a></h3>
+<ol><li>红节点不能相邻，所以任意根到叶的路径上，至少一半内部节点是黑的，即 <code>bh(root) ≥ h/2</code>。</li><li>黑高为 <code>b</code> 的子树至少有 <code>2^b-1</code> 个内部节点。</li><li>因此 <code>n ≥ 2^(h/2)-1</code>，得 <code>h ≤ 2log₂(n+1)</code>。</li></ol>
+<p>所以搜索、最小/最大、前驱/后继、插入和删除都可在 <code>O(log n)</code> 内完成。</p>
+<h2 id="chapter-05-h8">3. 旋转（rotation）<a class="heading-anchor" href="#chapter-05-h8" aria-label="链接到本节">#</a></h2>
+<p>左旋和右旋在不改变中序键序的前提下，局部改变树形。</p>
+<pre><code data-language="text">LEFT-ROTATE(x):                 y                 x
+      x                        / \               / \
+     / \       ----&gt;          x   c    &lt;----    a   y
+    a   y                    / \                   / \
+       / \                  a   b                 b   c
+      b   c</code></pre>
+<p>单次旋转是 <code>O(1)</code>。它不是“排序”：中序遍历顺序始终不变，变的是高度和父子关系。</p>
+<h2 id="chapter-05-h9">4. 红黑树插入<a class="heading-anchor" href="#chapter-05-h9" aria-label="链接到本节">#</a></h2>
+<p>先像普通 BST 一样插入新节点 <code>z</code>，并将它染红。染红不会改变各路径黑节点数，可能破坏的只有“红节点不相邻”。</p>
+<p>当父节点为红时，看叔父 <code>u</code> 和局部形状：</p>
+<ol><li><strong>叔父为红</strong>：父与叔染黑，祖父染红，将问题上移到祖父。</li><li><strong>叔父为黑，且是折线形</strong>（LR/RL）：先围绕父旋转，变成直线形。</li><li><strong>叔父为黑，且是直线形</strong>（LL/RR）：父染黑，祖父染红，围绕祖父旋转。</li><li>最后将根染黑。</li></ol>
+<p>插入修复最多做 2 次旋转，整体 <code>O(log n)</code>。</p>
+<h2 id="chapter-05-h10">5. 红黑树删除的理解方式<a class="heading-anchor" href="#chapter-05-h10" aria-label="链接到本节">#</a></h2>
+<p>删除的难点是：如果真正被移除的节点是黑色，某些路径会少一个黑节点。可把替代节点 <code>x</code> 想成带有一层“额外黑”（double black），修复目标是吸收或向上传递这层黑色。</p>
+<p>以 <code>x</code> 是左孩子为例，设兄弟为 <code>w</code>（右孩子的情况完全对称）：</p>
+<ol><li><strong><code>w</code> 红</strong>：将 <code>w</code> 染黑、父染红，围绕父左旋，转化为黑兄弟情况。</li><li><strong><code>w</code> 黑且两孩子黑</strong>：将 <code>w</code> 染红，额外黑上移到父。</li><li><strong><code>w</code> 黑，远侧孩子黑，近侧孩子红</strong>：对 <code>w</code> 右旋并换色，转成第 4 种。</li><li><strong><code>w</code> 黑且远侧孩子红</strong>：令 <code>w</code> 继承父颜色，父和远侧孩子染黑，围绕父左旋，消除额外黑。</li></ol>
+<p>删除修复 <code>O(log n)</code>，最多 3 次旋转。学习时不建议死记图，而应每次检查：局部 BST 顺序是否保持、各向下路径的黑高是否一致。</p>
+<h2 id="chapter-05-h11">6. 数据结构增广（augmentation）<a class="heading-anchor" href="#chapter-05-h11" aria-label="链接到本节">#</a></h2>
+<p>增广的思路是：在已知数据结构上增加一个可局部维护的字段，从而支持新操作。</p>
+<p>四步方法：</p>
+<ol><li>选择基础数据结构；</li><li>确定要增加的字段；</li><li>证明原操作可以高效维护该字段；</li><li>设计并分析新操作。</li></ol>
+<p>常用定理：若节点 <code>x</code> 的增广字段只需由 <code>x</code>、其左右孩子的信息在 <code>O(1)</code> 时间计算，则红黑树插入/删除时通常可在 <code>O(log n)</code> 内维护它；旋转只需更新局部少数节点。</p>
+<h2 id="chapter-05-h12">7. 顺序统计树（order-statistic tree）<a class="heading-anchor" href="#chapter-05-h12" aria-label="链接到本节">#</a></h2>
+<p>在红黑树每个节点增加：</p>
+<p><code>x.size = x.left.size + x.right.size + 1</code>，并定义 <code>NIL.size=0</code>。</p>
+<h3 id="chapter-05-h13">OS-SELECT：找子树中第 <code>i</code> 小<a class="heading-anchor" href="#chapter-05-h13" aria-label="链接到本节">#</a></h3>
+<p>令 <code>r=x.left.size+1</code>：</p>
+<ul><li><code>i=r</code>：返回 <code>x</code>；</li><li><code>i&lt;r</code>：到左子树找第 <code>i</code> 小；</li><li><code>i&gt;r</code>：到右子树找第 <code>i-r</code> 小。</li></ul>
+<p>时间 <code>O(log n)</code>。</p>
+<h3 id="chapter-05-h14">OS-RANK：求节点 <code>x</code> 的秩<a class="heading-anchor" href="#chapter-05-h14" aria-label="链接到本节">#</a></h3>
+<p>先计 <code>r=x.left.size+1</code>。从 <code>x</code> 向根走：每当当前节点是父的右孩子，就加上“父的左子树大小 + 1”。时间 <code>O(log n)</code>。</p>
+<h2 id="chapter-05-h15">8. 区间树（interval tree）<a class="heading-anchor" href="#chapter-05-h15" aria-label="链接到本节">#</a></h2>
+<p>存储闭区间 <code>[low,high]</code>，以 <code>low</code> 作为红黑树排序键，每个节点增加：</p>
+<p><code>x.max = max(x.interval.high, x.left.max, x.right.max)</code>。</p>
+<p>两闭区间 <code>i,j</code> 不重叠当且仅当 <code>i.high &lt; j.low</code> 或 <code>j.high &lt; i.low</code>。</p>
+<p>查询与目标区间 <code>i</code> 重叠的任意区间时：</p>
+<ul><li>若当前节点区间重叠，返回；</li><li>若左孩子非空且 <code>left.max ≥ i.low</code>，左子树仍可能有解，向左；</li><li>否则向右。</li></ul>
+<p>在红黑树上查询时间 <code>O(log n)</code>。<code>max</code> 字段的作用是安全地剪掉不可能产生重叠的子树。</p>
+<h2 id="chapter-05-h16">易错点<a class="heading-anchor" href="#chapter-05-h16" aria-label="链接到本节">#</a></h2>
+<ul><li>BST 的复杂度是 <code>O(h)</code>，不能在未说明平衡时直接写 <code>O(log n)</code>。</li><li>旋转不改变中序顺序；若改变了，指针连接必然有错。</li><li>红黑树的 <code>NIL</code> 是黑色哨兵，不是“不存在所以不计”。</li><li><code>size</code> 和 <code>max</code> 在旋转后只更新局部节点，但更新顺序要依赖新的孩子关系。</li></ul>
+<h2 id="chapter-05-h17">自测<a class="heading-anchor" href="#chapter-05-h17" aria-label="链接到本节">#</a></h2>
+<ol><li>将 <code>1,2,3,4,5,6,7</code> 顺序插入普通 BST，其高度是多少？</li><li>证明黑高为 <code>b</code> 的红黑子树至少有 <code>2^b-1</code> 个内部节点。</li><li>在顺序统计树中说明 <code>OS-RANK</code> 为什么只在从右孩子向父走时累加。</li><li>给出区间 <code>[16,21]</code>、<code>[8,9]</code>、<code>[25,30]</code>与查询 <code>[10,15]</code> 的重叠判定。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-05"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-06" data-chapter="chapter-06" data-title="06 高级数据结构 II：可并堆与并查集">
+    <div class="article-kicker"><span>06</span><span>06-高级数据结构-II.md</span></div>
+    <h1 id="chapter-06">06 高级数据结构 II：可并堆与并查集</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_5_2.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_5_2.pdf</a></p>
+<h2 id="chapter-06-h1">1. 可并堆（mergeable heap）<a class="heading-anchor" href="#chapter-06-h1" aria-label="链接到本节">#</a></h2>
+<p>以最小堆为例，希望支持：</p>
+<ul><li><code>MAKE-HEAP()</code>：创建空堆；</li><li><code>INSERT(H,x)</code>：插入元素；</li><li><code>MINIMUM(H)</code>：返回最小元素；</li><li><code>EXTRACT-MIN(H)</code>：删除并返回最小元素；</li><li><code>UNION(H₁,H₂)</code>：合并两堆；</li><li>常见扩展：<code>DECREASE-KEY</code>、<code>DELETE</code>。</li></ul>
+<p>二叉堆的 <code>EXTRACT-MIN</code> 和插入很高效，但两个堆的快速合并不是它的强项。二项堆和 Fibonacci 堆就是为“可并”设计的。</p>
+<h2 id="chapter-06-h2">2. 二项树与二项堆<a class="heading-anchor" href="#chapter-06-h2" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-06-h3">2.1 二项树 <code>Bₖ</code><a class="heading-anchor" href="#chapter-06-h3" aria-label="链接到本节">#</a></h3>
+<ul><li><code>B₀</code> 只有一个节点。</li><li><code>Bₖ</code> 由两棵 <code>Bₖ₋₁</code> 连接而成：一棵的根成为另一棵根的孩子。</li></ul>
+<p>性质：</p>
+<ul><li><code>Bₖ</code> 有 <code>2^k</code> 个节点；</li><li>树高为 <code>k</code>；</li><li>根的度为 <code>k</code>；</li><li>第 <code>i</code> 层有 <code>C(k,i)</code> 个节点。</li></ul>
+<p>二项堆是一组满足最小堆序的二项树，且每个度数最多只有一棵树。</p>
+<h3 id="chapter-06-h4">2.2 与二进制的对应<a class="heading-anchor" href="#chapter-06-h4" aria-label="链接到本节">#</a></h3>
+<p>如果堆中共有 <code>n</code> 个节点，将 <code>n</code> 写成二进制。第 <code>k</code> 位为 1，就表示存在一棵 <code>Bₖ</code>。例如 <code>13=(1101)₂=8+4+1</code>，堆由 <code>B₃,B₂,B₀</code> 组成。因此根链表最多 <code>⌊log₂n⌋+1</code> 个根。</p>
+<h3 id="chapter-06-h5">2.3 UNION 就像二进制加法<a class="heading-anchor" href="#chapter-06-h5" aria-label="链接到本节">#</a></h3>
+<ol><li>按度数合并两个根链表；</li><li>扫描链表，遇到两棵同度树，将较大键的根链到较小键根下；</li><li>同度树合成下一度树，类似产生进位。</li></ol>
+<p>需注意“三棵同度树”的情况：应留一棵，另两棵连接，否则指针扫描会跳过必要处理。</p>
+<p>时间 <code>O(log n)</code>。</p>
+<h3 id="chapter-06-h6">2.4 其他操作<a class="heading-anchor" href="#chapter-06-h6" aria-label="链接到本节">#</a></h3>
+<ul><li><code>MINIMUM</code>：扫描所有根，<code>O(log n)</code>；若另维护最小根指针可为 <code>O(1)</code>。</li><li><code>INSERT</code>：将新节点视为单节点二项堆再 <code>UNION</code>，<code>O(log n)</code>。</li><li><code>EXTRACT-MIN</code>：删除最小根，将其孩子链表反转成新堆，与剩余堆合并，<code>O(log n)</code>。</li><li><code>DECREASE-KEY</code>：减小后不断与父比较并向上交换键/卫星数据，<code>O(log n)</code>。</li><li><code>DELETE(x)</code>：先把键减到 <code>-∞</code>，再删除最小值，<code>O(log n)</code>。</li></ul>
+<h2 id="chapter-06-h7">3. Fibonacci 堆<a class="heading-anchor" href="#chapter-06-h7" aria-label="链接到本节">#</a></h2>
+<p>Fibonacci 堆的设计哲学是“延迟整理”（lazy consolidation）：插入和合并时先只把树挂到根链表，把同度树合并的工作集中留到 <code>EXTRACT-MIN</code> 执行。</p>
+<p>根和同一父节点的孩子通常放在循环双向链表中，因此拼接链表是 <code>O(1)</code>。</p>
+<h3 id="chapter-06-h8">3.1 势函数<a class="heading-anchor" href="#chapter-06-h8" aria-label="链接到本节">#</a></h3>
+<p>课件使用：</p>
+<p><code>Φ(H)=t(H)+2m(H)</code></p>
+<p>其中 <code>t(H)</code> 是根的数量，<code>m(H)</code> 是已标记节点的数量。标记节点表示：它自从成为某个节点的孩子后，已经失去过一个孩子。</p>
+<p>摊还代价：</p>
+<p><code>摊还代价 = 实际代价 + Φ(操作后)-Φ(操作前)</code>。</p>
+<p>势能可以理解为之前便宜操作存下的“会计信用”，以后整理时用它付账。</p>
+<h3 id="chapter-06-h9">3.2 INSERT 与 UNION<a class="heading-anchor" href="#chapter-06-h9" aria-label="链接到本节">#</a></h3>
+<ul><li>插入：将单节点加入根链表，更新最小指针。</li><li>合并：拼接两个循环双向根链表，更新最小指针。</li></ul>
+<p>两者的实际和摊还代价都是 <code>O(1)</code>。</p>
+<h3 id="chapter-06-h10">3.3 EXTRACT-MIN 与 CONSOLIDATE<a class="heading-anchor" href="#chapter-06-h10" aria-label="链接到本节">#</a></h3>
+<ol><li>将最小根 <code>z</code> 的所有孩子加入根链表，它们的父指针设为 <code>NIL</code>；</li><li>删除 <code>z</code>；</li><li>使用以度数为下标的辅助数组，不断链接同度根，直到每个度最多一个根；</li><li>重建根链表并找新最小根。</li></ol>
+<p>若最大度 <code>D(n)=O(log n)</code>，则 <code>EXTRACT-MIN</code> 的摊还代价是 <code>O(log n)</code>。</p>
+<h3 id="chapter-06-h11">3.4 DECREASE-KEY 与级联切断<a class="heading-anchor" href="#chapter-06-h11" aria-label="链接到本节">#</a></h3>
+<p>减小 <code>x.key</code> 后，若它仍不小于父键，无需处理。若破坏堆序：</p>
+<ol><li>将 <code>x</code> 从父 <code>y</code> 下切下并移入根链表；</li><li>若 <code>y</code> 未标记，且不是根，只标记 <code>y</code>；</li><li>若 <code>y</code> 已标记，也将 <code>y</code> 切下，并继续处理其父，即级联切断（cascading cut）。</li></ol>
+<p>一次操作可能切很多节点，但每次切断会释放之前标记积累的势能，所以摊还代价为 <code>O(1)</code>。</p>
+<h3 id="chapter-06-h12">3.5 度数为什么是 <code>O(log n)</code><a class="heading-anchor" href="#chapter-06-h12" aria-label="链接到本节">#</a></h3>
+<p>级联切断保证一个非根节点在失去第二个孩子前就会被切到根链表。因此度数为 <code>k</code> 的节点所在子树大小至少按 Fibonacci 数增长，约为 <code>Fₖ₊₂</code>。由 <code>Fₖ=Θ(φ^k)</code> 可得 <code>k=O(log n)</code>。</p>
+<h3 id="chapter-06-h13">3.6 操作对比<a class="heading-anchor" href="#chapter-06-h13" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>操作</th><th>二项堆最坏</th><th>Fibonacci 堆摊还</th></tr></thead><tbody><tr><td><code>MAKE-HEAP</code></td><td><code>O(1)</code></td><td><code>O(1)</code></td></tr><tr><td><code>MINIMUM</code></td><td><code>O(log n)</code>*</td><td><code>O(1)</code></td></tr><tr><td><code>INSERT</code></td><td><code>O(log n)</code></td><td><code>O(1)</code></td></tr><tr><td><code>UNION</code></td><td><code>O(log n)</code></td><td><code>O(1)</code></td></tr><tr><td><code>EXTRACT-MIN</code></td><td><code>O(log n)</code></td><td><code>O(log n)</code></td></tr><tr><td><code>DECREASE-KEY</code></td><td><code>O(log n)</code></td><td><code>O(1)</code></td></tr><tr><td><code>DELETE</code></td><td><code>O(log n)</code></td><td><code>O(log n)</code></td></tr></tbody></table></div>
+<p><code>*</code> 二项堆若额外维护最小根指针，查最小值可以做到 <code>O(1)</code>，但其他维护细节会随实现改变。</p>
+<p>Fibonacci 堆主要是理论上优化大量 <code>DECREASE-KEY</code> 的算法，如 Dijkstra 和 Prim。指针结构复杂、常数大，实际工程中不一定优于二叉堆。</p>
+<h2 id="chapter-06-h14">4. 不相交集数据结构（disjoint-set union, DSU）<a class="heading-anchor" href="#chapter-06-h14" aria-label="链接到本节">#</a></h2>
+<p>又称并查集（union-find），维护一组两两不相交的动态集合：</p>
+<ul><li><code>MAKE-SET(x)</code>：创建只含 <code>x</code> 的集合；</li><li><code>FIND-SET(x)</code>：返回 <code>x</code> 所在集合的代表元素；</li><li><code>UNION(x,y)</code>：合并 <code>x</code> 和 <code>y</code> 所在集合。</li></ul>
+<p>应用：Kruskal 最小生成树、动态连通性、图像连通分量、账户合并。</p>
+<h3 id="chapter-06-h15">4.1 链表表示<a class="heading-anchor" href="#chapter-06-h15" aria-label="链接到本节">#</a></h3>
+<p>每个集合是一条链表，每个节点指向表头代表。若总把大表接到小表并更新大量代表指针，一序列操作可退化得很严重。</p>
+<p>加权合并（weighted union）总是把较小的表接到较大的表。每个元素的代表指针每被更新一次，其所在集合大小至少翻倍，所以单个元素最多被更新 <code>O(log n)</code> 次。</p>
+<h3 id="chapter-06-h16">4.2 有根树表示<a class="heading-anchor" href="#chapter-06-h16" aria-label="链接到本节">#</a></h3>
+<p>每个集合用一棵有根树表示，根是代表。</p>
+<ul><li><code>MAKE-SET(x)</code>: <code>parent[x]=x, rank[x]=0</code></li><li><code>FIND-SET(x)</code>: 向父指针走到根</li><li><code>UNION(x,y)</code>: 先找两根，再连接</li></ul>
+<h3 id="chapter-06-h17">4.3 按秩合并（union by rank）<a class="heading-anchor" href="#chapter-06-h17" aria-label="链接到本节">#</a></h3>
+<p><code>rank</code> 是树高的上界估计：</p>
+<ul><li>小秩根指向大秩根；</li><li>只有两根秩相等时，新根的秩加 1。</li></ul>
+<p>路径压缩后 <code>rank</code> 不再是当前精确树高，但仍是安全的合并启发式，不要在压缩时修改非根节点的秩。</p>
+<h3 id="chapter-06-h18">4.4 路径压缩（path compression）<a class="heading-anchor" href="#chapter-06-h18" aria-label="链接到本节">#</a></h3>
+<pre><code data-language="text">FIND-SET(x)
+if x != parent[x]
+    parent[x] = FIND-SET(parent[x])
+return parent[x]</code></pre>
+<p>在查找返回时，将路径上所有节点直接连到根，使后续查找更快。</p>
+<p>同时使用按秩合并和路径压缩时，对 <code>m</code> 个操作、<code>n</code> 个 <code>MAKE-SET</code>，总时间为 <code>O(m α(n))</code>，每次操作摊还 <code>O(α(n))</code>。<code>α</code> 是反 Ackermann 函数，在任何现实规模下都小得可以视为不超过很小常数，但理论上它不是常数。</p>
+<h3 id="chapter-06-h19">例：Kruskal 算法中防止成环<a class="heading-anchor" href="#chapter-06-h19" aria-label="链接到本节">#</a></h3>
+<p>对边按权从小到大扫描 <code>(u,v)</code>：</p>
+<ul><li>若 <code>FIND(u) != FIND(v)</code>，加入边并 <code>UNION(u,v)</code>；</li><li>否则两端已在同一连通分量，加边会成环，跳过。</li></ul>
+<h2 id="chapter-06-h20">易错点<a class="heading-anchor" href="#chapter-06-h20" aria-label="链接到本节">#</a></h2>
+<ul><li>二项堆中“每个度最多一棵树”，而非“每种高度必须有一棵”。</li><li>Fibonacci 堆的 <code>O(1)</code> <code>DECREASE-KEY</code> 是摊还界，一次实际操作可以很贵。</li><li>DSU 的 <code>UNION(x,y)</code> 应连接两个根，不是直接连接 <code>x,y</code>。</li><li>路径压缩不改变集合代表和成员关系，只改变内部树形。</li></ul>
+<h2 id="chapter-06-h21">自测<a class="heading-anchor" href="#chapter-06-h21" aria-label="链接到本节">#</a></h2>
+<ol><li>将 <code>13</code> 个节点的二项堆写成二项树组合。</li><li>解释 Fibonacci 堆中标记位如何为级联切断付费。</li><li>对 <code>0..7</code> 执行若干合并后，画出一次 <code>FIND-SET</code> 前后的父指针变化。</li><li>为什么按秩合并与路径压缩一个优化“写”，一个优化“读”？</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-06"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-07" data-chapter="chapter-07" data-title="07 动态规划">
+    <div class="article-kicker"><span>07</span><span>07-动态规划.md</span></div>
+    <h1 id="chapter-07">07 动态规划</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_6_1_DP.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_6_1_DP.pdf</a></p>
+<h2 id="chapter-07-h1">1. 动态规划的核心<a class="heading-anchor" href="#chapter-07-h1" aria-label="链接到本节">#</a></h2>
+<p>动态规划（dynamic programming, DP）与分治都把原问题化成子问题，区别在于：</p>
+<ul><li>分治的子问题通常相互独立；</li><li>DP 的子问题重叠，同一子问题会被反复需要，因此只求一次并保存答案。</li></ul>
+<p>DP 常用于最优化问题。“一个最优解”不一定唯一，多个方案可以有同样的最优值。</p>
+<h3 id="chapter-07-h2">两个结构性条件<a class="heading-anchor" href="#chapter-07-h2" aria-label="链接到本节">#</a></h3>
+<ol><li><strong>最优子结构（optimal substructure）</strong>：原问题的最优解包含子问题的最优解。</li><li><strong>重叠子问题（overlapping subproblems）</strong>：不同递归分支会反复遇到同一状态。</li></ol>
+<p>有最优子结构并不代表必须用 DP；贪心算法也有最优子结构。DP 的关键是需要比较多个选择，而不能未证明地只保留局部最好选择。</p>
+<h2 id="chapter-07-h3">2. DP 设计四步<a class="heading-anchor" href="#chapter-07-h3" aria-label="链接到本节">#</a></h2>
+<ol><li>刻画最优解的结构；</li><li>定义状态，写出状态转移方程；</li><li>用自顶向下记忆化或自底向上填表计算最优值；</li><li>如果需要具体方案，另存决策并回溯重建。</li></ol>
+<p>一个好状态必须包含“对未来决策有用的全部信息”，同时不携带无用历史。</p>
+<h2 id="chapter-07-h4">3. 钢条切割（rod cutting）<a class="heading-anchor" href="#chapter-07-h4" aria-label="链接到本节">#</a></h2>
+<p>给定长度为 <code>n</code> 的钢条和价格表 <code>p[i]</code>，决定如何切割使收益最大。不切也是一种方案。</p>
+<h3 id="chapter-07-h5">状态与转移<a class="heading-anchor" href="#chapter-07-h5" aria-label="链接到本节">#</a></h3>
+<p>定义 <code>r[j]</code> 为长度 <code>j</code> 的最大收益：</p>
+<ul><li><code>r[0]=0</code></li><li><code>r[j]=max₁≤i≤j (p[i]+r[j-i])</code></li></ul>
+<p>把方案按“第一段长度 <code>i</code>”划分，就不会遗漏任何切法。</p>
+<h3 id="chapter-07-h6">素朴递归为什么慢<a class="heading-anchor" href="#chapter-07-h6" aria-label="链接到本节">#</a></h3>
+<p>素朴 <code>CUT-ROD</code> 对每个可能的第一刀继续递归，相同的剩余长度被反复计算，调用数呈指数级。</p>
+<h3 id="chapter-07-h7">自顶向下与自底向上<a class="heading-anchor" href="#chapter-07-h7" aria-label="链接到本节">#</a></h3>
+<ul><li>记忆化（memoization）：保留自然递归，查表避免重算；只计算实际访问的状态。</li><li>表格法（bottom-up）：按 <code>j=1..n</code> 从小到大填表，无递归开销。</li></ul>
+<p>两者时间 <code>Θ(n²)</code>，空间 <code>Θ(n)</code>。</p>
+<h3 id="chapter-07-h8">重建切割方案<a class="heading-anchor" href="#chapter-07-h8" aria-label="链接到本节">#</a></h3>
+<p>另存 <code>s[j]</code> 表示长度 <code>j</code> 在最优解中的第一段长度。从 <code>n</code> 开始反复输出 <code>s[n]</code>，然后令 <code>n=n-s[n]</code>。</p>
+<p>例：若 <code>p[1..4]=[1,5,8,9]</code>，长度 4 的最优方案是 <code>2+2</code>，收益 10，高于不切的 9。</p>
+<h2 id="chapter-07-h9">4. 矩阵链乘法（matrix-chain multiplication）<a class="heading-anchor" href="#chapter-07-h9" aria-label="链接到本节">#</a></h2>
+<p>矩阵乘法满足结合律，不同加括号方式结果相同，但标量乘法次数可相差巨大。</p>
+<p>若 <code>Aᵢ</code> 维度为 <code>p[i-1] × p[i]</code>，定义：</p>
+<ul><li><code>m[i,j]</code>：计算 <code>Aᵢ...Aⱼ</code> 的最少标量乘法次数；</li><li><code>s[i,j]</code>：取得最优值的最后分割位置 <code>k</code>。</li></ul>
+<p>转移：</p>
+<ul><li><code>m[i,i]=0</code></li><li><code>m[i,j]=minᵢ≤ₖ&lt;ⱼ {m[i,k]+m[k+1,j]+p[i-1]p[k]p[j]}</code></li></ul>
+<p>填表顺序按链长 <code>l=2..n</code>，再枚举起点 <code>i</code> 和分割点 <code>k</code>。</p>
+<ul><li>状态数 <code>Θ(n²)</code>；</li><li>每个状态最多枚举 <code>O(n)</code> 个分割；</li><li>时间 <code>Θ(n³)</code>，空间 <code>Θ(n²)</code>。</li></ul>
+<h3 id="chapter-07-h10">例子<a class="heading-anchor" href="#chapter-07-h10" aria-label="链接到本节">#</a></h3>
+<p><code>A₁:10×10, A₂:10×5, A₃:5×50</code></p>
+<ul><li><code>(A₁A₂)A₃</code>: <code>10·10·5 + 10·5·50 = 3000</code></li><li><code>A₁(A₂A₃)</code>: <code>10·5·50 + 10·10·50 = 7500</code></li></ul>
+<p>最优括号化是前者。</p>
+<h2 id="chapter-07-h11">5. 如何发现最优子结构<a class="heading-anchor" href="#chapter-07-h11" aria-label="链接到本节">#</a></h2>
+<ol><li>做一个选择，例如钢条第一刀或矩阵链最后分割点。</li><li>假设已知最优解中的该选择。</li><li>确定该选择后留下哪些子问题。</li><li>用反证法：如果某子问题不是最优的，用更好子解替换它，就能改善原解，与原解最优矛盾。</li></ol>
+<h2 id="chapter-07-h12">6. 最长公共子序列（LCS）<a class="heading-anchor" href="#chapter-07-h12" aria-label="链接到本节">#</a></h2>
+<p>子序列（subsequence）保留相对顺序，但不要求连续；子串（substring）要求连续。</p>
+<p>对 <code>X=x₁...xₘ</code>、<code>Y=y₁...yₙ</code>，定义 <code>c[i,j]</code> 为前缀 <code>X[1..i]</code> 和 <code>Y[1..j]</code> 的 LCS 长度：</p>
+<pre><code data-language="text">c[i,0] = c[0,j] = 0
+if x[i] == y[j]: c[i,j] = c[i-1,j-1] + 1
+else:            c[i,j] = max(c[i-1,j], c[i,j-1])</code></pre>
+<p>直观：</p>
+<ul><li>末尾字符相等时，可以把它放到 LCS 末尾，问题缩成两个更短前缀；</li><li>末尾字符不等时，最优 LCS 不可能同时使用这两个末尾，至少删去其中一个，取两种子问题的较大者。</li></ul>
+<p>时间 <code>Θ(mn)</code>，完整表空间 <code>Θ(mn)</code>。如果只要长度，转移只依赖上一行和当前行，可降至 <code>O(min(m,n))</code> 空间。</p>
+<h3 id="chapter-07-h13">回溯一个 LCS<a class="heading-anchor" href="#chapter-07-h13" aria-label="链接到本节">#</a></h3>
+<p>从 <code>c[m,n]</code> 向左上回溯：</p>
+<ul><li>字符相等：记录字符，斜向左上；</li><li>否则走向值较大的上方或左方；</li><li>值相等时两条路都可能产生不同 LCS。</li></ul>
+<p>例：<code>X=ABCBDAB</code>、<code>Y=BDCABA</code>，LCS 长度为 4，<code>BCBA</code> 和 <code>BDAB</code> 都是最优解。</p>
+<h2 id="chapter-07-h14">7. 最优二叉搜索树（optimal BST）<a class="heading-anchor" href="#chapter-07-h14" aria-label="链接到本节">#</a></h2>
+<p>已排序的成功查询键 <code>k₁&lt;...&lt;kₙ</code>，其成功概率为 <code>p₁...pₙ</code>；失败查询落在间隔虚拟键 <code>d₀...dₙ</code>，概率为 <code>q₀...qₙ</code>。目标是使期望搜索代价最小，不是单纯让树高最小。高频键应倾向靠近根。</p>
+<p>定义：</p>
+<ul><li><code>e[i,j]</code>：包含 <code>kᵢ...kⱼ</code> 的最优子树期望代价；</li><li><code>w[i,j] = Σₗ₌ᵢʲ pₗ + Σₗ₌ᵢ₋₁ʲ qₗ</code>：子问题总概率；</li><li><code>root[i,j]</code>：最优根的下标。</li></ul>
+<p>边界：<code>e[i,i-1]=q[i-1]</code>、<code>w[i,i-1]=q[i-1]</code>。</p>
+<p>转移：</p>
+<p><code>e[i,j]=minᵢ≤ᵣ≤ⱼ {e[i,r-1]+e[r+1,j]+w[i,j]}</code></p>
+<p>加上 <code>w[i,j]</code> 是因为当一棵子树接到新根下时，其中所有查询的深度都增加 1。</p>
+<p>课件的经典 DP 时间 <code>Θ(n³)</code>，空间 <code>Θ(n²)</code>。</p>
+<h2 id="chapter-07-h15">8. 通用检查清单<a class="heading-anchor" href="#chapter-07-h15" aria-label="链接到本节">#</a></h2>
+<ol><li><strong>State</strong>：状态精确表示什么？</li><li><strong>Choice</strong>：当前需枚举哪些决策？</li><li><strong>Transition</strong>：为什么转移覆盖所有方案且不错过最优解？</li><li><strong>Base case</strong>：空区间、长度 0/1 如何定义？</li><li><strong>Order</strong>：计算当前状态时，依赖是否已算好？</li><li><strong>Answer</strong>：最终答案在哪个单元？</li><li><strong>Reconstruction</strong>：需要额外保存哪个决策？</li><li><strong>Complexity</strong>：状态数 × 单状态转移数，是否还有回溯开销？</li></ol>
+<h2 id="chapter-07-h16">易错点<a class="heading-anchor" href="#chapter-07-h16" aria-label="链接到本节">#</a></h2>
+<ul><li>将“最优值”和“一个最优方案”混为一张表，导致无法回溯。</li><li>填表顺序不满足依赖；区间 DP 通常按区间长度递增。</li><li>LCS 是子序列，不要错当成最长公共子串。</li><li>状态转移只给出算法；要完成正确性，还应解释为什么最优解必属于所枚举的某一类。</li></ul>
+<h2 id="chapter-07-h17">自测<a class="heading-anchor" href="#chapter-07-h17" aria-label="链接到本节">#</a></h2>
+<ol><li>对价格 <code>[1,5,8,9,10,17,17,20]</code> 求长度 8 的最优收益与一种切法。</li><li>对维度链 <code>[30,35,15,5,10,20,25]</code> 写出矩阵链 DP 的状态和转移。</li><li>区分字符串 <code>ABCBDAB</code> 和 <code>BDCABA</code> 的 LCS 与最长公共子串。</li><li>最优 BST 为什么必须把失败查询概率 <code>q</code> 也纳入代价？</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-07"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-08" data-chapter="chapter-08" data-title="08 贪心算法">
+    <div class="article-kicker"><span>08</span><span>08-贪心算法.md</span></div>
+    <h1 id="chapter-08">08 贪心算法</h1>
+<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_6_2_Greedy.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_6_2_Greedy.pdf</a></p>
+<h2 id="chapter-08-h1">1. 贪心思想<a class="heading-anchor" href="#chapter-08-h1" aria-label="链接到本节">#</a></h2>
+<p>贪心算法（greedy algorithm）在每一步做当下看起来最好的选择，且之后不回退。它通常比 DP 简单、更省空间，但只有在能证明局部选择可安全地导向全局最优时才正确。</p>
+<p>两个核心性质：</p>
+<ol><li><strong>贪心选择性质（greedy-choice property）</strong>：存在一个全局最优解包含当前的贪心选择。</li><li><strong>最优子结构（optimal substructure）</strong>：做完安全选择后，剩余问题的最优解与当前选择组成原问题最优解。</li></ol>
+<h2 id="chapter-08-h2">2. 贪心设计与证明模板<a class="heading-anchor" href="#chapter-08-h2" aria-label="链接到本节">#</a></h2>
+<ol><li>找到一个可能的局部选择规则。</li><li>用交换论证：从任一最优解出发，将其第一个选择替换为贪心选择，且不使解变差。</li><li>证明做完选择后剩余部分是同类的更小问题。</li><li>给出实现并分析复杂度。</li></ol>
+<p>若无法证明第 2 步，就应主动寻找反例，而不是把“看起来很合理”当成正确性。</p>
+<h2 id="chapter-08-h3">3. 活动选择问题<a class="heading-anchor" href="#chapter-08-h3" aria-label="链接到本节">#</a></h2>
+<p>有一个一次只能服务一个活动的资源。活动 <code>aᵢ</code> 在区间 <code>[sᵢ,fᵢ)</code> 占用资源，目标是选出数量最多的互相兼容活动。</p>
+<h3 id="chapter-08-h4">正确的贪心规则<a class="heading-anchor" href="#chapter-08-h4" aria-label="链接到本节">#</a></h3>
+<p>每次选择“当前兼容活动中结束时间最早的”。</p>
+<p>不是选：</p>
+<ul><li>开始最早的；</li><li>持续时间最短的；</li><li>与其他活动冲突最少的。</li></ul>
+<p>这些规则都可以构造反例。</p>
+<h3 id="chapter-08-h5">交换论证<a class="heading-anchor" href="#chapter-08-h5" aria-label="链接到本节">#</a></h3>
+<p>令 <code>aₘ</code> 是最早结束的活动，<code>A</code> 是任一最优方案，其第一个活动为 <code>aₖ</code>。因为 <code>fₘ ≤ fₖ</code>，用 <code>aₘ</code> 替换 <code>aₖ</code> 不会使后续任何活动变得不兼容，选中活动数也不变。因此存在一个最优解包含 <code>aₘ</code>。</p>
+<p>选定 <code>aₘ</code> 后，只需解所有 <code>sᵢ≥fₘ</code> 的兼容活动构成的子问题。</p>
+<h3 id="chapter-08-h6">迭代算法<a class="heading-anchor" href="#chapter-08-h6" aria-label="链接到本节">#</a></h3>
+<p>先按结束时间排序。选第一个活动，然后向后扫描，遇到 <code>s[m]≥f[k]</code> 就选择它并更新 <code>k=m</code>。</p>
+<ul><li>若输入已按结束时间排序：<code>Θ(n)</code>；</li><li>否则含排序：<code>O(n log n)</code>。</li></ul>
+<h3 id="chapter-08-h7">例子<a class="heading-anchor" href="#chapter-08-h7" aria-label="链接到本节">#</a></h3>
+<p>活动：<code>(1,4),(3,5),(0,6),(5,7),(3,9),(5,9),(6,10),(8,11),(8,12),(2,14),(12,16)</code>。</p>
+<p>按最早结束依次选：<code>(1,4) → (5,7) → (8,11) → (12,16)</code>，共 4 个。</p>
+<h2 id="chapter-08-h8">4. 贪心与 DP 的边界<a class="heading-anchor" href="#chapter-08-h8" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-08-h9">分数背包与 0-1 背包<a class="heading-anchor" href="#chapter-08-h9" aria-label="链接到本节">#</a></h3>
+<ul><li>分数背包（fractional knapsack）：物品可切分，按单位重量价值 <code>value/weight</code> 从大到小选是正确贪心。</li><li>0-1 背包：物品不可切，按价值密度贪心不一定最优，通常需要 DP。</li></ul>
+<p>反例：容量 50，物品 <code>(w,v)</code> 为 <code>(10,60),(20,100),(30,120)</code>。密度贪心选前两件，价值 160；0-1 最优是后两件，价值 220。</p>
+<h2 id="chapter-08-h10">5. Huffman 编码<a class="heading-anchor" href="#chapter-08-h10" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-08-h11">5.1 前缀码<a class="heading-anchor" href="#chapter-08-h11" aria-label="链接到本节">#</a></h3>
+<p>可变长编码中，任一字符的码字都不是另一码字的前缀，称为前缀码（prefix code）。它可在不加分隔符的情况下即时、唯一解码。</p>
+<p>二叉树中，左边记 0，右边记 1，每个叶子对应一个字符，根到叶子路径就是码字。</p>
+<h3 id="chapter-08-h12">5.2 目标函数<a class="heading-anchor" href="#chapter-08-h12" aria-label="链接到本节">#</a></h3>
+<p>若字符 <code>c</code> 频数为 <code>f(c)</code>，码长为叶子深度 <code>dᴛ(c)</code>，总位数为：</p>
+<p><code>B(T)=Σᶜ∈C f(c)dᴛ(c)</code>。</p>
+<p>目标是找到使 <code>B(T)</code> 最小的前缀码树。</p>
+<h3 id="chapter-08-h13">5.3 Huffman 贪心算法<a class="heading-anchor" href="#chapter-08-h13" aria-label="链接到本节">#</a></h3>
+<ol><li>将每个字符作为一棵单节点树，按频率放入最小优先队列。</li><li>反复取出频率最小的两棵树 <code>x,y</code>。</li><li>新建父节点 <code>z</code>，权重 <code>z.freq=x.freq+y.freq</code>，将 <code>x,y</code> 作为孩子。</li><li>将 <code>z</code> 放回队列，直到只剩一棵树。</li></ol>
+<p>用二叉堆时，时间 <code>O(n log n)</code>。</p>
+<h3 id="chapter-08-h14">5.4 正确性直观<a class="heading-anchor" href="#chapter-08-h14" aria-label="链接到本节">#</a></h3>
+<ul><li>在某个最优前缀码中，频率最小的两个字符可以放在最深且互为兄弟的两个叶子上。</li><li>将它们合并为一个权重之和的伪字符，得到一个更小的同类问题。</li><li>解出小问题后再展开这个伪字符，得到原问题最优解。</li></ul>
+<p><span class="note-tag tag-PITFALL">PITFALL</span> Huffman 码不一定唯一。相同频率的取出顺序、左右孩子选择都可以改变具体码字，但最优总代价可以相同。</p>
+<h2 id="chapter-08-h15">6. 拟阵（matroid）<a class="heading-anchor" href="#chapter-08-h15" aria-label="链接到本节">#</a></h2>
+<p>拟阵 <code>M=(S,I)</code> 包含有限集 <code>S</code> 和一组称为独立集的子集族 <code>I</code>，满足：</p>
+<ol><li><strong>非空性</strong>：<code>∅∈I</code>。</li><li><strong>遗传性（hereditary property）</strong>：若 <code>B∈I</code> 且 <code>A⊆B</code>，则 <code>A∈I</code>。</li><li><strong>交换性（exchange property）</strong>：若 <code>A,B∈I</code> 且 <code>|A|&lt;|B|</code>，则存在 <code>x∈B-A</code>，使 <code>A∪{x}∈I</code>。</li></ol>
+<p>图拟阵（graphic matroid）是典型例子：<code>S</code> 是无向图的边集，<code>I</code> 是所有无环边集。极大独立集对应生成森林；若图连通，基对应生成树。</p>
+<p>交换性保证所有极大独立集大小相同。更重要的是，对带非负权的拟阵，按权从大到小扫描元素，只要加入后仍独立就选它，会得到最大权独立集。</p>
+<pre><code data-language="text">A = ∅
+for x in S sorted by nonincreasing weight
+    if A ∪ {x} is independent
+        A = A ∪ {x}
+return A</code></pre>
+<p>Kruskal 算法可视为图拟阵上的贪心：若求最小权生成树，按边权从小到大加入不成环的边。</p>
+<h2 id="chapter-08-h16">7. 带截止时间和惩罚的单位时间任务<a class="heading-anchor" href="#chapter-08-h16" aria-label="链接到本节">#</a></h2>
+<p>每个任务 <code>aᵢ</code> 耗时 1，有整数截止时间 <code>dᵢ</code> 和逾期惩罚 <code>wᵢ</code>。目标是最小化逾期任务的总惩罚，等价于最大化按时完成任务的总权重。</p>
+<p>定义一组任务是独立的，若存在一种排程使它们全部按时完成。这些独立集构成拟阵。</p>
+<p>可行性检查：对所选任务按截止时间排序，第 <code>t</code> 个任务必须满足 <code>d≥t</code>。等价地，对每个时刻 <code>t</code>，截止时间不超过 <code>t</code> 的所选任务数不超过 <code>t</code>。</p>
+<p>贪心方法：按惩罚 <code>w</code> 从大到小考虑任务，若加入后仍可安排全部按时完成，就保留它。最后将按时任务按截止时间排序，逾期任务放在后面。</p>
+<h2 id="chapter-08-h17">8. 一页速记<a class="heading-anchor" href="#chapter-08-h17" aria-label="链接到本节">#</a></h2>
+<ul><li>贪心不是启发式：课程中讨论的贪心算法要有正确性证明。</li><li>活动选择的关键是“最早结束”，为后续留出最大空间。</li><li>Huffman 每次合并频率最小的两个字符/子树。</li><li>拟阵的交换性是通用贪心正确的结构性条件。</li></ul>
+<h2 id="chapter-08-h18">易错点<a class="heading-anchor" href="#chapter-08-h18" aria-label="链接到本节">#</a></h2>
+<ul><li>最早开始、持续时间最短都不保证活动选择最优。</li><li>Huffman 树的左右孩子可交换，不应将一个具体比特串当作唯一答案。</li><li>独立集的任意子集必须独立；这是检查一个结构是否可能为拟阵的快速条件。</li><li>局部规则的反例只需一个就能否定“总是正确”；若声称正确，则需对全部合法输入证明。</li></ul>
+<h2 id="chapter-08-h19">自测<a class="heading-anchor" href="#chapter-08-h19" aria-label="链接到本节">#</a></h2>
+<ol><li>为“活动持续时间最短”的贪心规则构造反例。</li><li>对频率 <code>a:45,b:13,c:12,d:16,e:9,f:5</code> 构造 Huffman 树，计算总编码位数。</li><li>检查“一个无向图的所有连通边集”是否构成拟阵，用遗传性说明。</li><li>解释为什么最小化逾期惩罚等价于最大化按时任务的惩罚权重之和。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-08"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+  <article class="chapter" id="view-chapter-09" data-chapter="chapter-09" data-title="09 术语表与复杂度速查">
+    <div class="article-kicker"><span>09</span><span>09-术语表与复杂度速查.md</span></div>
+    <h1 id="chapter-09">09 术语表与复杂度速查</h1>
+<h2 id="chapter-09-h1">1. 常用中英文术语<a class="heading-anchor" href="#chapter-09-h1" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>English</th><th>中文</th><th>简要说明</th></tr></thead><tbody><tr><td>algorithm</td><td>算法</td><td>从输入到输出的有限、明确计算步骤</td></tr><tr><td>correctness</td><td>正确性</td><td>对所有合法输入终止并输出正确结果</td></tr><tr><td>loop invariant</td><td>循环不变式</td><td>在迭代边界始终成立的命题</td></tr><tr><td>asymptotic notation</td><td>渐近记号</td><td>描述输入增长时的函数数量级</td></tr><tr><td>recurrence</td><td>递归式</td><td>用更小规模的值定义当前值</td></tr><tr><td>substitution method</td><td>代入法</td><td>猜界后用归纳证明</td></tr><tr><td>recursion tree</td><td>递归树</td><td>按递归层次求总代价</td></tr><tr><td>master method</td><td>主方法</td><td>求 <code>aT(n/b)+f(n)</code> 的常用定理</td></tr><tr><td>stable sort</td><td>稳定排序</td><td>相等键的相对次序不变</td></tr><tr><td>in-place</td><td>原地</td><td>主体计算只需 <code>O(1)</code> 辅助数组空间</td></tr><tr><td>comparison sort</td><td>比较排序</td><td>只通过元素间比较获得次序</td></tr><tr><td>decision tree</td><td>决策树</td><td>用树表示比较算法的全部执行路径</td></tr><tr><td>order statistic</td><td>顺序统计量</td><td>集合中第 <code>i</code> 小元素</td></tr><tr><td>pivot</td><td>主元/枢轴</td><td>快排或选择算法的分区基准</td></tr><tr><td>binary search tree</td><td>二叉搜索树</td><td>左小右大的动态有序结构</td></tr><tr><td>successor / predecessor</td><td>后继 / 前驱</td><td>严格更大的最小键 / 严格更小的最大键</td></tr><tr><td>red-black tree</td><td>红黑树</td><td>树高 <code>O(log n)</code> 的平衡 BST</td></tr><tr><td>rotation</td><td>旋转</td><td>保持中序顺序的局部重构</td></tr><tr><td>augmentation</td><td>数据结构增广</td><td>增加局部可维护字段以支持新操作</td></tr><tr><td>mergeable heap</td><td>可并堆</td><td>高效支持两堆合并的优先队列</td></tr><tr><td>amortized analysis</td><td>摊还分析</td><td>分析一序列操作的平均保证，不依赖概率</td></tr><tr><td>potential function</td><td>势函数</td><td>将数据结构中的“未来工作”量化</td></tr><tr><td>cascading cut</td><td>级联切断</td><td>Fibonacci 堆中沿祖先链连续切断</td></tr><tr><td>disjoint-set union</td><td>并查集</td><td>维护不相交动态集合</td></tr><tr><td>union by rank</td><td>按秩合并</td><td>小秩根连到大秩根</td></tr><tr><td>path compression</td><td>路径压缩</td><td>查找时将路径节点直连根</td></tr><tr><td>dynamic programming</td><td>动态规划</td><td>保存重叠子问题的答案</td></tr><tr><td>memoization</td><td>记忆化</td><td>自顶向下的按需缓存</td></tr><tr><td>bottom-up</td><td>自底向上</td><td>按依赖顺序填表</td></tr><tr><td>optimal substructure</td><td>最优子结构</td><td>最优解中包含子问题最优解</td></tr><tr><td>overlapping subproblems</td><td>重叠子问题</td><td>递归过程反复访问相同状态</td></tr><tr><td>greedy-choice property</td><td>贪心选择性质</td><td>存在包含局部贪心选择的全局最优解</td></tr><tr><td>exchange argument</td><td>交换论证</td><td>将最优解改造为包含贪心选择且不变差</td></tr><tr><td>prefix code</td><td>前缀码</td><td>任一码字不是另一码字的前缀</td></tr><tr><td>matroid</td><td>拟阵</td><td>满足遗传性与交换性的独立集系统</td></tr></tbody></table></div>
+<h2 id="chapter-09-h2">2. 排序与选择复杂度<a class="heading-anchor" href="#chapter-09-h2" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>算法</th><th>时间</th><th>额外空间</th><th>稳定</th><th>关键条件</th></tr></thead><tbody><tr><td>插入排序</td><td>最好 <code>Θ(n)</code>，平均/最坏 <code>Θ(n²)</code></td><td><code>O(1)</code></td><td>是</td><td>小规模/近乎有序</td></tr><tr><td>选择排序</td><td><code>Θ(n²)</code></td><td><code>O(1)</code></td><td>否</td><td>交换次数少</td></tr><tr><td>归并排序</td><td><code>Θ(n log n)</code></td><td><code>Θ(n)</code></td><td>是</td><td>稳定，适合链表/外排</td></tr><tr><td>堆排序</td><td><code>Θ(n log n)</code></td><td><code>O(1)</code></td><td>否</td><td>最坏界好，原地</td></tr><tr><td>随机快排</td><td>期望 <code>Θ(n log n)</code>，最坏 <code>Θ(n²)</code></td><td>期望 <code>O(log n)</code> 栈</td><td>否</td><td>实用中常数小</td></tr><tr><td>计数排序</td><td><code>Θ(n+k)</code></td><td><code>Θ(n+k)</code></td><td>是</td><td>小范围整数键</td></tr><tr><td>基数排序</td><td><code>Θ(d(n+k))</code></td><td>依内层排序</td><td>是</td><td>内层必须稳定</td></tr><tr><td>桶排序</td><td>均匀分布期望 <code>Θ(n)</code></td><td><code>Θ(n)</code></td><td>取决于桶内排序</td><td>依赖分布</td></tr><tr><td>随机 Quickselect</td><td>期望 <code>Θ(n)</code>，最坏 <code>Θ(n²)</code></td><td>递归栈</td><td>不适用</td><td>只找第 <code>i</code> 小</td></tr><tr><td>median of medians</td><td>最坏 <code>Θ(n)</code></td><td>依实现</td><td>不适用</td><td>最坏线性选择</td></tr></tbody></table></div>
+<h2 id="chapter-09-h3">3. 数据结构操作复杂度<a class="heading-anchor" href="#chapter-09-h3" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>数据结构</th><th>查找最值</th><th>插入</th><th>取出最值</th><th>减小键</th><th>合并</th></tr></thead><tbody><tr><td>二叉堆</td><td><code>O(1)</code></td><td><code>O(log n)</code></td><td><code>O(log n)</code></td><td><code>O(log n)</code></td><td><code>O(n)</code> 级（通常重建）</td></tr><tr><td>二项堆</td><td><code>O(log n)</code>*</td><td><code>O(log n)</code></td><td><code>O(log n)</code></td><td><code>O(log n)</code></td><td><code>O(log n)</code></td></tr><tr><td>Fibonacci 堆（摊还）</td><td><code>O(1)</code></td><td><code>O(1)</code></td><td><code>O(log n)</code></td><td><code>O(1)</code></td><td><code>O(1)</code></td></tr></tbody></table></div>
+<p><code>*</code> 指未额外维护最小指针的课件版实现。</p>
+<div class="table-wrap"><table><thead><tr><th>结构</th><th>主要操作</th><th>时间</th></tr></thead><tbody><tr><td>普通 BST</td><td>search/insert/delete</td><td><code>O(h)</code>，最坏 <code>O(n)</code></td></tr><tr><td>红黑树</td><td>search/insert/delete</td><td><code>O(log n)</code></td></tr><tr><td>顺序统计树</td><td>select/rank</td><td><code>O(log n)</code></td></tr><tr><td>区间树</td><td>找任意重叠区间</td><td><code>O(log n)</code></td></tr><tr><td>并查集</td><td>make/find/union</td><td>摊还 <code>O(α(n))</code></td></tr></tbody></table></div>
+<h2 id="chapter-09-h4">4. DP 与贪心经典复杂度<a class="heading-anchor" href="#chapter-09-h4" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>问题</th><th>时间</th><th>空间</th></tr></thead><tbody><tr><td>钢条切割 DP</td><td><code>Θ(n²)</code></td><td><code>Θ(n)</code></td></tr><tr><td>矩阵链乘法</td><td><code>Θ(n³)</code></td><td><code>Θ(n²)</code></td></tr><tr><td>LCS</td><td><code>Θ(mn)</code></td><td><code>Θ(mn)</code>；只求长度可降为 <code>O(min(m,n))</code></td></tr><tr><td>最优 BST（经典 DP）</td><td><code>Θ(n³)</code></td><td><code>Θ(n²)</code></td></tr><tr><td>活动选择</td><td>已排序 <code>Θ(n)</code>，否则 <code>O(n log n)</code></td><td><code>O(1)</code> 输出外</td></tr><tr><td>Huffman</td><td><code>O(n log n)</code></td><td><code>O(n)</code></td></tr></tbody></table></div>
+<h2 id="chapter-09-h5">5. 常用公式<a class="heading-anchor" href="#chapter-09-h5" aria-label="链接到本节">#</a></h2>
+<ul><li><code>∑ᵢ₌₁ⁿ i = n(n+1)/2 = Θ(n²)</code></li><li><code>∑ᵢ₌₁ⁿ i² = n(n+1)(2n+1)/6 = Θ(n³)</code></li><li><code>∑ᵢ₌₀^⌊log n⌋ n/2ⁱ &lt; 2n = Θ(n)</code></li><li><code>Hₙ=∑ᵢ₌₁ⁿ 1/i = Θ(log n)</code></li><li><code>log(n!)=Θ(n log n)</code></li><li><code>Fₙ=Θ(φⁿ)</code>，<code>φ=(1+√5)/2</code></li><li>完全二叉树高度 <code>⌊log₂n⌋</code></li><li>红黑树高度 <code>h ≤ 2log₂(n+1)</code></li></ul>
+<h2 id="chapter-09-h6">6. 考试作答模板<a class="heading-anchor" href="#chapter-09-h6" aria-label="链接到本节">#</a></h2>
+<h3 id="chapter-09-h7">分析一个算法<a class="heading-anchor" href="#chapter-09-h7" aria-label="链接到本节">#</a></h3>
+<ol><li>定义输入规模。</li><li>指出主要操作及执行次数。</li><li>若递归，写出递归式与基本情况。</li><li>给出紧界 <code>Θ</code>；若只能给上界/下界，说明原因。</li><li>分开最好、平均/期望、最坏情况。</li><li>另报告辅助空间，包括递归栈。</li></ol>
+<h3 id="chapter-09-h8">证明一个贪心算法<a class="heading-anchor" href="#chapter-09-h8" aria-label="链接到本节">#</a></h3>
+<ol><li>明确贪心选择。</li><li>从任意最优解出发。</li><li>用交换使它包含贪心选择，且目标值不变差。</li><li>将剩余部分归约为更小的同类问题。</li><li>归纳完成证明。</li></ol>
+<h3 id="chapter-09-h9">设计一个 DP<a class="heading-anchor" href="#chapter-09-h9" aria-label="链接到本节">#</a></h3>
+<ol><li>用一句话定义状态，包含下标范围。</li><li>写基本情况。</li><li>按“最后一个选择”或“第一个选择”划分所有方案。</li><li>写转移并证明最优子结构。</li><li>说明填表顺序、答案位置和重建方法。</li><li>用“状态数 × 转移枚举数”给复杂度。</li></ol>
+    <footer class="chapter-footer">
+      <button class="complete-button" type="button" data-complete="chapter-09"><span>○</span> 标记本章已复习</button>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </article>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const chapterMeta = [{"id":"chapter-home-0","title":"算法基础复习资料","number":"总览","headings":[{"level":1,"text":"算法基础复习资料","id":"chapter-home-0"},{"level":2,"text":"使用方法","id":"chapter-home-0-h1"},{"level":2,"text":"内容导航","id":"chapter-home-0-h2"},{"level":2,"text":"资料范围","id":"chapter-home-0-h3"},{"level":2,"text":"持续扩充规范","id":"chapter-home-0-h4"},{"level":2,"text":"复习主线","id":"chapter-home-0-h5"}]},{"id":"chapter-00","title":"00 课程地图","number":"00","headings":[{"level":1,"text":"00 课程地图","id":"chapter-00"},{"level":2,"text":"课程目标","id":"chapter-00-h1"},{"level":2,"text":"一个问题如何选算法","id":"chapter-00-h2"},{"level":2,"text":"规模比常数更重要","id":"chapter-00-h3"},{"level":2,"text":"复习节奏","id":"chapter-00-h4"},{"level":2,"text":"自测","id":"chapter-00-h5"}]},{"id":"chapter-01","title":"01 算法与分析基础","number":"01","headings":[{"level":1,"text":"01 算法与分析基础","id":"chapter-01"},{"level":2,"text":"1. 什么是算法","id":"chapter-01-h1"},{"level":3,"text":"例：排序问题（sorting problem）","id":"chapter-01-h2"},{"level":2,"text":"2. 为什么研究算法","id":"chapter-01-h3"},{"level":2,"text":"3. 插入排序作为入门例子","id":"chapter-01-h4"},{"level":3,"text":"手算例子","id":"chapter-01-h5"},{"level":3,"text":"循环不变式（loop invariant）","id":"chapter-01-h6"},{"level":2,"text":"4. RAM 计算模型","id":"chapter-01-h7"},{"level":2,"text":"5. 最好、平均、最坏情况","id":"chapter-01-h8"},{"level":3,"text":"逆序对视角","id":"chapter-01-h9"},{"level":2,"text":"6. 分治与归并排序预览","id":"chapter-01-h10"},{"level":2,"text":"一页速记","id":"chapter-01-h11"},{"level":2,"text":"易错点","id":"chapter-01-h12"},{"level":2,"text":"自测","id":"chapter-01-h13"}]},{"id":"chapter-02","title":"02 渐近记号与递归式","number":"02","headings":[{"level":1,"text":"02 渐近记号与递归式","id":"chapter-02"},{"level":2,"text":"1. 渐近记号的目的","id":"chapter-02-h1"},{"level":3,"text":"O 记号：渐近上界","id":"chapter-02-h2"},{"level":3,"text":"Ω 记号：渐近下界","id":"chapter-02-h3"},{"level":3,"text":"Θ 记号：渐近紧界","id":"chapter-02-h4"},{"level":3,"text":"o 与 ω：非紧界","id":"chapter-02-h5"},{"level":2,"text":"2. 记号之间的关系","id":"chapter-02-h6"},{"level":2,"text":"3. 常见增长率","id":"chapter-02-h7"},{"level":3,"text":"常用等式","id":"chapter-02-h8"},{"level":3,"text":"Fibonacci 数","id":"chapter-02-h9"},{"level":2,"text":"4. 递归式（recurrence）","id":"chapter-02-h10"},{"level":3,"text":"4.1 代入法（substitution method）","id":"chapter-02-h11"},{"level":3,"text":"4.2 递归树（recursion tree）","id":"chapter-02-h12"},{"level":3,"text":"4.3 主方法（master method）","id":"chapter-02-h13"},{"level":2,"text":"一页速记","id":"chapter-02-h16"},{"level":2,"text":"易错点","id":"chapter-02-h17"},{"level":2,"text":"自测","id":"chapter-02-h18"}]},{"id":"chapter-03","title":"03 比较排序","number":"03","headings":[{"level":1,"text":"03 比较排序","id":"chapter-03"},{"level":2,"text":"1. 评价排序算法的维度","id":"chapter-03-h1"},{"level":2,"text":"2. 简单排序","id":"chapter-03-h2"},{"level":3,"text":"2.1 插入排序（insertion sort）","id":"chapter-03-h3"},{"level":3,"text":"2.2 选择排序（selection sort）","id":"chapter-03-h4"},{"level":3,"text":"2.3 冒泡排序（bubble sort）","id":"chapter-03-h5"},{"level":3,"text":"2.4 希尔排序（Shellsort）","id":"chapter-03-h6"},{"level":2,"text":"3. 归并排序（merge sort）","id":"chapter-03-h7"},{"level":2,"text":"4. 堆与堆排序","id":"chapter-03-h8"},{"level":3,"text":"4.1 堆的数组表示","id":"chapter-03-h9"},{"level":3,"text":"4.2 MAX-HEAPIFY","id":"chapter-03-h10"},{"level":3,"text":"4.3 BUILD-MAX-HEAP 为什么是 `O(n)`","id":"chapter-03-h11"},{"level":3,"text":"4.4 堆排序（heapsort）","id":"chapter-03-h12"},{"level":3,"text":"4.5 优先队列操作","id":"chapter-03-h13"},{"level":2,"text":"5. 快速排序（quicksort）","id":"chapter-03-h14"},{"level":3,"text":"5.1 分区思想","id":"chapter-03-h15"},{"level":3,"text":"5.2 复杂度","id":"chapter-03-h16"},{"level":3,"text":"重复元素很多时","id":"chapter-03-h17"},{"level":2,"text":"6. 对比表","id":"chapter-03-h18"},{"level":2,"text":"一页速记","id":"chapter-03-h19"},{"level":2,"text":"自测","id":"chapter-03-h20"}]},{"id":"chapter-04","title":"04 线性时间排序与选择","number":"04","headings":[{"level":1,"text":"04 线性时间排序与选择","id":"chapter-04"},{"level":2,"text":"1. 比较排序的下界","id":"chapter-04-h1"},{"level":2,"text":"2. 计数排序（counting sort）","id":"chapter-04-h2"},{"level":3,"text":"适用条件","id":"chapter-04-h3"},{"level":3,"text":"三步","id":"chapter-04-h4"},{"level":3,"text":"例子","id":"chapter-04-h5"},{"level":2,"text":"3. 基数排序（radix sort）","id":"chapter-04-h6"},{"level":3,"text":"为什么内层必须稳定","id":"chapter-04-h7"},{"level":2,"text":"4. 桶排序（bucket sort）","id":"chapter-04-h8"},{"level":2,"text":"5. 顺序统计量（order statistic）","id":"chapter-04-h9"},{"level":3,"text":"5.1 最小值与最大值","id":"chapter-04-h10"},{"level":3,"text":"5.2 随机选择（RANDOMIZED-SELECT / Quickselect）","id":"chapter-04-h11"},{"level":3,"text":"5.3 最坏线性时间选择（SELECT）","id":"chapter-04-h12"},{"level":2,"text":"6. 选型表","id":"chapter-04-h13"},{"level":2,"text":"易错点","id":"chapter-04-h14"},{"level":2,"text":"自测","id":"chapter-04-h15"}]},{"id":"chapter-05","title":"05 高级数据结构 I：搜索树与增广","number":"05","headings":[{"level":1,"text":"05 高级数据结构 I：搜索树与增广","id":"chapter-05"},{"level":2,"text":"1. 二叉搜索树（BST）","id":"chapter-05-h1"},{"level":3,"text":"基本操作","id":"chapter-05-h2"},{"level":3,"text":"后继（successor）","id":"chapter-05-h3"},{"level":3,"text":"删除的三种形态","id":"chapter-05-h4"},{"level":2,"text":"2. 红黑树（red-black tree）","id":"chapter-05-h5"},{"level":3,"text":"五条性质","id":"chapter-05-h6"},{"level":3,"text":"为什么高度是 `O(log n)`","id":"chapter-05-h7"},{"level":2,"text":"3. 旋转（rotation）","id":"chapter-05-h8"},{"level":2,"text":"4. 红黑树插入","id":"chapter-05-h9"},{"level":2,"text":"5. 红黑树删除的理解方式","id":"chapter-05-h10"},{"level":2,"text":"6. 数据结构增广（augmentation）","id":"chapter-05-h11"},{"level":2,"text":"7. 顺序统计树（order-statistic tree）","id":"chapter-05-h12"},{"level":3,"text":"OS-SELECT：找子树中第 `i` 小","id":"chapter-05-h13"},{"level":3,"text":"OS-RANK：求节点 `x` 的秩","id":"chapter-05-h14"},{"level":2,"text":"8. 区间树（interval tree）","id":"chapter-05-h15"},{"level":2,"text":"易错点","id":"chapter-05-h16"},{"level":2,"text":"自测","id":"chapter-05-h17"}]},{"id":"chapter-06","title":"06 高级数据结构 II：可并堆与并查集","number":"06","headings":[{"level":1,"text":"06 高级数据结构 II：可并堆与并查集","id":"chapter-06"},{"level":2,"text":"1. 可并堆（mergeable heap）","id":"chapter-06-h1"},{"level":2,"text":"2. 二项树与二项堆","id":"chapter-06-h2"},{"level":3,"text":"2.1 二项树 `Bₖ`","id":"chapter-06-h3"},{"level":3,"text":"2.2 与二进制的对应","id":"chapter-06-h4"},{"level":3,"text":"2.3 UNION 就像二进制加法","id":"chapter-06-h5"},{"level":3,"text":"2.4 其他操作","id":"chapter-06-h6"},{"level":2,"text":"3. Fibonacci 堆","id":"chapter-06-h7"},{"level":3,"text":"3.1 势函数","id":"chapter-06-h8"},{"level":3,"text":"3.2 INSERT 与 UNION","id":"chapter-06-h9"},{"level":3,"text":"3.3 EXTRACT-MIN 与 CONSOLIDATE","id":"chapter-06-h10"},{"level":3,"text":"3.4 DECREASE-KEY 与级联切断","id":"chapter-06-h11"},{"level":3,"text":"3.5 度数为什么是 `O(log n)`","id":"chapter-06-h12"},{"level":3,"text":"3.6 操作对比","id":"chapter-06-h13"},{"level":2,"text":"4. 不相交集数据结构（disjoint-set union, DSU）","id":"chapter-06-h14"},{"level":3,"text":"4.1 链表表示","id":"chapter-06-h15"},{"level":3,"text":"4.2 有根树表示","id":"chapter-06-h16"},{"level":3,"text":"4.3 按秩合并（union by rank）","id":"chapter-06-h17"},{"level":3,"text":"4.4 路径压缩（path compression）","id":"chapter-06-h18"},{"level":3,"text":"例：Kruskal 算法中防止成环","id":"chapter-06-h19"},{"level":2,"text":"易错点","id":"chapter-06-h20"},{"level":2,"text":"自测","id":"chapter-06-h21"}]},{"id":"chapter-07","title":"07 动态规划","number":"07","headings":[{"level":1,"text":"07 动态规划","id":"chapter-07"},{"level":2,"text":"1. 动态规划的核心","id":"chapter-07-h1"},{"level":3,"text":"两个结构性条件","id":"chapter-07-h2"},{"level":2,"text":"2. DP 设计四步","id":"chapter-07-h3"},{"level":2,"text":"3. 钢条切割（rod cutting）","id":"chapter-07-h4"},{"level":3,"text":"状态与转移","id":"chapter-07-h5"},{"level":3,"text":"素朴递归为什么慢","id":"chapter-07-h6"},{"level":3,"text":"自顶向下与自底向上","id":"chapter-07-h7"},{"level":3,"text":"重建切割方案","id":"chapter-07-h8"},{"level":2,"text":"4. 矩阵链乘法（matrix-chain multiplication）","id":"chapter-07-h9"},{"level":3,"text":"例子","id":"chapter-07-h10"},{"level":2,"text":"5. 如何发现最优子结构","id":"chapter-07-h11"},{"level":2,"text":"6. 最长公共子序列（LCS）","id":"chapter-07-h12"},{"level":3,"text":"回溯一个 LCS","id":"chapter-07-h13"},{"level":2,"text":"7. 最优二叉搜索树（optimal BST）","id":"chapter-07-h14"},{"level":2,"text":"8. 通用检查清单","id":"chapter-07-h15"},{"level":2,"text":"易错点","id":"chapter-07-h16"},{"level":2,"text":"自测","id":"chapter-07-h17"}]},{"id":"chapter-08","title":"08 贪心算法","number":"08","headings":[{"level":1,"text":"08 贪心算法","id":"chapter-08"},{"level":2,"text":"1. 贪心思想","id":"chapter-08-h1"},{"level":2,"text":"2. 贪心设计与证明模板","id":"chapter-08-h2"},{"level":2,"text":"3. 活动选择问题","id":"chapter-08-h3"},{"level":3,"text":"正确的贪心规则","id":"chapter-08-h4"},{"level":3,"text":"交换论证","id":"chapter-08-h5"},{"level":3,"text":"迭代算法","id":"chapter-08-h6"},{"level":3,"text":"例子","id":"chapter-08-h7"},{"level":2,"text":"4. 贪心与 DP 的边界","id":"chapter-08-h8"},{"level":3,"text":"分数背包与 0-1 背包","id":"chapter-08-h9"},{"level":2,"text":"5. Huffman 编码","id":"chapter-08-h10"},{"level":3,"text":"5.1 前缀码","id":"chapter-08-h11"},{"level":3,"text":"5.2 目标函数","id":"chapter-08-h12"},{"level":3,"text":"5.3 Huffman 贪心算法","id":"chapter-08-h13"},{"level":3,"text":"5.4 正确性直观","id":"chapter-08-h14"},{"level":2,"text":"6. 拟阵（matroid）","id":"chapter-08-h15"},{"level":2,"text":"7. 带截止时间和惩罚的单位时间任务","id":"chapter-08-h16"},{"level":2,"text":"8. 一页速记","id":"chapter-08-h17"},{"level":2,"text":"易错点","id":"chapter-08-h18"},{"level":2,"text":"自测","id":"chapter-08-h19"}]},{"id":"chapter-09","title":"09 术语表与复杂度速查","number":"09","headings":[{"level":1,"text":"09 术语表与复杂度速查","id":"chapter-09"},{"level":2,"text":"1. 常用中英文术语","id":"chapter-09-h1"},{"level":2,"text":"2. 排序与选择复杂度","id":"chapter-09-h2"},{"level":2,"text":"3. 数据结构操作复杂度","id":"chapter-09-h3"},{"level":2,"text":"4. DP 与贪心经典复杂度","id":"chapter-09-h4"},{"level":2,"text":"5. 常用公式","id":"chapter-09-h5"},{"level":2,"text":"6. 考试作答模板","id":"chapter-09-h6"},{"level":3,"text":"分析一个算法","id":"chapter-09-h7"},{"level":3,"text":"证明一个贪心算法","id":"chapter-09-h8"},{"level":3,"text":"设计一个 DP","id":"chapter-09-h9"}]}];
+    const articles = [...document.querySelectorAll('[data-chapter]')];
+    const links = [...document.querySelectorAll('[data-chapter-link]')];
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const resultList = document.getElementById('resultList');
+    const searchCount = document.getElementById('searchCount');
+    const currentTitle = document.getElementById('currentTitle');
+    const progress = document.querySelector('.reading-progress');
+    const completedKey = 'algo-review-completed-v1';
+    let completed = new Set(JSON.parse(localStorage.getItem(completedKey) || '[]'));
+    let currentChapter = chapterMeta[0].id;
+
+    function escapeRegExp(value) {
+      return value.replace(/[.*+?^$(){}|[]\]/g, '\$&');
+    }
+
+    function highlight(value, query) {
+      const safe = value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+      if (!query) return safe;
+      return safe.replace(new RegExp('(' + escapeRegExp(query) + ')', 'ig'), '<mark>$1</mark>');
+    }
+
+    function updateCompleted() {
+      links.forEach((link) => link.classList.toggle('completed', completed.has(link.dataset.chapterLink)));
+      document.querySelectorAll('[data-complete]').forEach((button) => {
+        const done = completed.has(button.dataset.complete);
+        button.classList.toggle('done', done);
+        button.innerHTML = done ? '<span>●</span> 本章已复习' : '<span>○</span> 标记本章已复习';
+      });
+      document.getElementById('completedCount').textContent = completed.size;
+      document.getElementById('completionBar').style.width = (completed.size / chapterMeta.length * 100) + '%';
+      localStorage.setItem(completedKey, JSON.stringify([...completed]));
+    }
+
+    function showChapter(id, anchor = '') {
+      const targetMeta = chapterMeta.find((item) => item.id === id) || chapterMeta[0];
+      currentChapter = targetMeta.id;
+      searchResults.classList.remove('active');
+      articles.forEach((article) => article.classList.toggle('active', article.dataset.chapter === currentChapter));
+      links.forEach((link) => link.classList.toggle('active', link.dataset.chapterLink === currentChapter));
+      currentTitle.textContent = targetMeta.title;
+      document.title = targetMeta.title + ' · 算法基础';
+      document.body.classList.remove('sidebar-open');
+      requestAnimationFrame(() => {
+        const anchorNode = anchor ? document.getElementById(anchor) : null;
+        (anchorNode || document.getElementById('top')).scrollIntoView({ behavior: 'auto' });
+        updateReadingProgress();
+      });
+    }
+
+    function route() {
+      const raw = decodeURIComponent(location.hash.slice(1));
+      if (!raw) return showChapter(chapterMeta[0].id);
+      const direct = chapterMeta.find((item) => item.id === raw);
+      if (direct) return showChapter(direct.id);
+      for (const meta of chapterMeta) {
+        if (meta.headings.some((heading) => heading.id === raw)) return showChapter(meta.id, raw);
+      }
+      showChapter(chapterMeta[0].id);
+    }
+
+    function makeSnippet(text, query) {
+      const normalized = text.replace(/s+/g, ' ').trim();
+      const index = normalized.toLocaleLowerCase().indexOf(query.toLocaleLowerCase());
+      if (index < 0) return normalized.slice(0, 120);
+      const start = Math.max(0, index - 45);
+      const end = Math.min(normalized.length, index + query.length + 75);
+      return (start ? '…' : '') + normalized.slice(start, end) + (end < normalized.length ? '…' : '');
+    }
+
+    function runSearch(query) {
+      const clean = query.trim();
+      if (!clean) {
+        searchResults.classList.remove('active');
+        showChapter(currentChapter);
+        return;
+      }
+      articles.forEach((article) => article.classList.remove('active'));
+      searchResults.classList.add('active');
+      const lower = clean.toLocaleLowerCase();
+      const matches = [];
+      for (const article of articles) {
+        const text = article.innerText;
+        if (text.toLocaleLowerCase().includes(lower)) {
+          matches.push({
+            id: article.dataset.chapter,
+            title: article.dataset.title,
+            snippet: makeSnippet(text, clean),
+          });
+        }
+      }
+      searchCount.textContent = matches.length + ' 个章节';
+      resultList.innerHTML = matches.length
+        ? matches.map((item) => '<a class="result-item" href="#' + item.id + '"><strong>' + highlight(item.title, clean) + '</strong><small>' + highlight(item.snippet, clean) + '</small></a>').join('')
+        : '<div class="empty-state">没有找到匹配内容。试试“快排”、“红黑树”或“O(n log n)”。</div>';
+      currentTitle.textContent = '搜索：' + clean;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateReadingProgress() {
+      const active = document.querySelector('.chapter.active');
+      if (!active) return progress.style.width = '0';
+      const rect = active.getBoundingClientRect();
+      const total = Math.max(1, active.offsetHeight - window.innerHeight + 110);
+      const passed = Math.min(total, Math.max(0, -rect.top + 90));
+      progress.style.width = (passed / total * 100) + '%';
+    }
+
+    document.addEventListener('click', (event) => {
+      const completeButton = event.target.closest('[data-complete]');
+      if (completeButton) {
+        const id = completeButton.dataset.complete;
+        completed.has(id) ? completed.delete(id) : completed.add(id);
+        updateCompleted();
+      }
+    });
+
+    searchInput.addEventListener('input', () => runSearch(searchInput.value));
+    window.addEventListener('hashchange', () => { searchInput.value = ''; route(); });
+    window.addEventListener('scroll', updateReadingProgress, { passive: true });
+    window.addEventListener('resize', updateReadingProgress);
+    document.getElementById('printButton').addEventListener('click', () => window.print());
+    document.getElementById('menuButton').addEventListener('click', () => document.body.classList.toggle('sidebar-open'));
+    document.addEventListener('keydown', (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+      if (event.key === 'Escape') {
+        searchInput.value = '';
+        runSearch('');
+        document.body.classList.remove('sidebar-open');
+      }
+    });
+
+    const savedTheme = localStorage.getItem('algo-review-theme');
+    if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+    document.getElementById('themeButton').addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('algo-review-theme', next);
+    });
+
+    updateCompleted();
+    route();
+  </script>
+</body>
+</html>

@@ -194,6 +194,7 @@
     h3 { margin: 32px 0 10px; color: var(--accent-strong); font-size: 19px; }
     h4 { margin: 24px 0 8px; font-size: 16px; }
     .heading-anchor { margin-left: 8px; opacity: 0; font-size: .65em; text-decoration: none; }
+.file-ref { color: var(--muted); border-bottom: 1px dashed color-mix(in srgb, var(--muted) 45%, transparent); cursor: help; }
     h2:hover .heading-anchor, h3:hover .heading-anchor, h4:hover .heading-anchor { opacity: .55; }
     p { margin: 10px 0 15px; }
     ul, ol { padding-left: 1.45em; }
@@ -385,7 +386,7 @@
       <div class="sidebar-footer">
         <div><span id="completedCount">0</span> / 13 章已复习</div>
         <div class="completion-line"><span id="completionBar"></span></div>
-        <div>内容生成于 2026年10月22日 18:34</div>
+        <div>内容生成于 2026年10月22日 20:43</div>
       </div>
     </aside>
 
@@ -452,7 +453,7 @@
   <article class="chapter" id="view-chapter-00" data-chapter="chapter-00" data-title="00 课程地图">
     <div class="article-kicker"><span>00</span><span>00-课程地图.md</span></div>
     <h1 id="chapter-00">00 课程地图</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_0.pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_0.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026_Topic_0.pdf</span></p>
 <h2 id="chapter-00-h1">课程目标<a class="heading-anchor" href="#chapter-00-h1" aria-label="链接到本节">#</a></h2>
 <p><code>Introduction to Algorithms</code> 通常译为“算法导论”。这门课不只要“会写代码”，而是要回答四个问题：</p>
 <ol><li>问题的输入、输出和约束是什么？</li><li>算法为什么一定正确？</li><li>它使用多少时间和空间？</li><li>当输入变大时，有没有更好的方法？</li></ol>
@@ -477,7 +478,7 @@
   <article class="chapter" id="view-chapter-01" data-chapter="chapter-01" data-title="01 算法与分析基础">
     <div class="article-kicker"><span>01</span><span>01-算法与分析基础.md</span></div>
     <h1 id="chapter-01">01 算法与分析基础</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_1.pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_1.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026_Topic_1.pdf</span></p>
 <h2 id="chapter-01-h1">1. 什么是算法<a class="heading-anchor" href="#chapter-01-h1" aria-label="链接到本节">#</a></h2>
 <p>算法（algorithm）是一个明确的计算过程：接收输入（input），经过有限步骤，产生输出（output）。一个完整的算法问题应当同时说明：</p>
 <ul><li>输入的数据类型和约束；</li><li>输出必须满足的性质；</li><li>对所有合法输入都终止；</li><li>结果对所有合法输入都正确。</li></ul>
@@ -556,7 +557,7 @@ T(n) = 2T(n/2) + c·n      n &gt; 1</code></pre>
   <article class="chapter" id="view-chapter-02" data-chapter="chapter-02" data-title="02 渐近记号与递归式">
     <div class="article-kicker"><span>02</span><span>02-渐近记号与递归式.md</span></div>
     <h1 id="chapter-02">02 渐近记号与递归式</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_2(1).pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_2(1).pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026_Topic_2(1).pdf</span></p>
 <h2 id="chapter-02-h1">1. 渐近记号的目的<a class="heading-anchor" href="#chapter-02-h1" aria-label="链接到本节">#</a></h2>
 <p>渐近分析（asymptotic analysis）描述 <code>n → ∞</code> 时函数的增长速度，忽略有限个小输入、常数因子与低阶项。</p>
 <h3 id="chapter-02-h2">O 记号：渐近上界<a class="heading-anchor" href="#chapter-02-h2" aria-label="链接到本节">#</a></h3>
@@ -648,7 +649,7 @@ T(n) = 2T(n/2) + c·n      n &gt; 1</code></pre>
   <article class="chapter" id="view-chapter-03" data-chapter="chapter-03" data-title="03 比较排序">
     <div class="article-kicker"><span>03</span><span>03-比较排序.md</span></div>
     <h1 id="chapter-03">03 比较排序</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026_Topic_3.pdf" target="_blank" rel="noopener">Algorithm_2026_Topic_3.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026_Topic_3.pdf</span></p>
 <h2 id="chapter-03-h1">1. 评价排序算法的维度<a class="heading-anchor" href="#chapter-03-h1" aria-label="链接到本节">#</a></h2>
 <ul><li>时间复杂度：通常关心比较次数和元素移动次数。（课件原话：usually measured by the number of data comparisons and the number of data movements）</li><li>空间复杂度：是否需要与 <code>n</code> 成比例的辅助数组。</li><li>稳定性（stability）：相等键值的记录排序后是否保留原相对次序。</li><li>原地性（in-place）：数组主体是否只用 <code>O(1)</code> 辅助存储；递归栈通常另行说明。</li><li>自适应性：输入已经部分有序时是否更快。</li></ul>
 <p>稳定性只在元素除排序键外还有附加信息时有意义。例如先按姓名排序，再稳定地按班级排序，同班内仍保持姓名顺序。</p>
@@ -818,7 +819,7 @@ RANDOMIZED-QUICKSORT(A, p, r)
   <article class="chapter" id="view-chapter-04" data-chapter="chapter-04" data-title="04 线性时间排序与选择">
     <div class="article-kicker"><span>04</span><span>04-线性时间排序与选择.md</span></div>
     <h1 id="chapter-04">04 线性时间排序与选择</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_4_1.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_4_1.pdf</a> 与 <a href="./Algorithm_2026__Topic_4_2.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_4_2.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026__Topic_4_1.pdf</span> 与 <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026__Topic_4_2.pdf</span></p>
 <h2 id="chapter-04-h1">1. 比较排序的下界<a class="heading-anchor" href="#chapter-04-h1" aria-label="链接到本节">#</a></h2>
 <p>对于只通过两元素比较来确定次序的算法，可用决策树（decision tree）建模：</p>
 <ul><li>每个内部节点是一次比较；</li><li>两条边是比较的两种结果；</li><li>每个叶子对应一种输入排列的最终次序。</li></ul>
@@ -940,7 +941,7 @@ return RANDOMIZED-SELECT(A, q+1, r, i-k)</code></pre>
   <article class="chapter" id="view-chapter-05" data-chapter="chapter-05" data-title="05 高级数据结构 I：搜索树与增广">
     <div class="article-kicker"><span>05</span><span>05-高级数据结构-I.md</span></div>
     <h1 id="chapter-05">05 高级数据结构 I：搜索树与增广</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_5_1.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_5_1.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026__Topic_5_1.pdf</span></p>
 <h2 id="chapter-05-h1">1. 二叉搜索树（BST）<a class="heading-anchor" href="#chapter-05-h1" aria-label="链接到本节">#</a></h2>
 <p>二叉搜索树（binary search tree）对每个节点 <code>x</code> 满足：</p>
 <ul><li>左子树中的键不大于 <code>x.key</code>；</li><li>右子树中的键不小于 <code>x.key</code>；</li><li>具体如何放置重复键必须在实现中统一规定。</li></ul>
@@ -1131,7 +1132,7 @@ return x</code></pre>
   <article class="chapter" id="view-chapter-06" data-chapter="chapter-06" data-title="06 高级数据结构 II：可并堆与并查集">
     <div class="article-kicker"><span>06</span><span>06-高级数据结构-II.md</span></div>
     <h1 id="chapter-06">06 高级数据结构 II：可并堆与并查集</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_5_2.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_5_2.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026__Topic_5_2.pdf</span></p>
 <h2 id="chapter-06-h1">1. 可并堆（mergeable heap）<a class="heading-anchor" href="#chapter-06-h1" aria-label="链接到本节">#</a></h2>
 <p>以最小堆为例，希望支持：</p>
 <ul><li><code>MAKE-HEAP()</code>：创建空堆；</li><li><code>INSERT(H,x)</code>：插入元素；</li><li><code>MINIMUM(H)</code>：返回最小元素；</li><li><code>EXTRACT-MIN(H)</code>：删除并返回最小元素；</li><li><code>UNION(H₁,H₂)</code>：合并两堆；</li><li>常见扩展：<code>DECREASE-KEY</code>、<code>DELETE</code>。</li></ul>
@@ -1285,7 +1286,7 @@ return parent[x]</code></pre>
   <article class="chapter" id="view-chapter-07" data-chapter="chapter-07" data-title="07 动态规划">
     <div class="article-kicker"><span>07</span><span>07-动态规划.md</span></div>
     <h1 id="chapter-07">07 动态规划</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_6_1_DP.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_6_1_DP.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026__Topic_6_1_DP.pdf</span></p>
 <h2 id="chapter-07-h1">1. 动态规划的核心<a class="heading-anchor" href="#chapter-07-h1" aria-label="链接到本节">#</a></h2>
 <p>动态规划（dynamic programming, DP）与分治都把原问题化成子问题，区别在于：</p>
 <ul><li>分治的子问题通常相互独立；</li><li>DP 的子问题重叠，同一子问题会被反复需要，因此只求一次并保存答案。</li></ul>
@@ -1469,7 +1470,7 @@ return e, root</code></pre>
   <article class="chapter" id="view-chapter-08" data-chapter="chapter-08" data-title="08 贪心算法">
     <div class="article-kicker"><span>08</span><span>08-贪心算法.md</span></div>
     <h1 id="chapter-08">08 贪心算法</h1>
-<p><strong>来源：</strong> <a href="./Algorithm_2026__Topic_6_2_Greedy.pdf" target="_blank" rel="noopener">Algorithm_2026__Topic_6_2_Greedy.pdf</a></p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">Algorithm_2026__Topic_6_2_Greedy.pdf</span></p>
 <h2 id="chapter-08-h1">1. 贪心思想<a class="heading-anchor" href="#chapter-08-h1" aria-label="链接到本节">#</a></h2>
 <p>贪心算法（greedy algorithm）在每一步做当下看起来最好的选择，且之后不回退。它通常比 DP 简单、更省空间，但只有在能证明局部选择可安全地导向全局最优时才正确。</p>
 <p>两个核心性质：</p>
@@ -1618,7 +1619,7 @@ a7(6,10) 保留       [2,3,4,4,6]</code></pre>
   <article class="chapter" id="view-chapter-10" data-chapter="chapter-10" data-title="10 往年期中真题精讲（2023–2025）">
     <div class="article-kicker"><span>10</span><span>10-往年期中真题精讲.md</span></div>
     <h1 id="chapter-10">10 往年期中真题精讲（2023–2025）</h1>
-<p><strong>来源：</strong> <a href="./2023-2025期中考试试题及答案/2023 年秋季学期算法基础期中考试.pdf" target="_blank" rel="noopener">2023 年试题</a>、<a href="./2023-2025期中考试试题及答案/2023 年秋季学期算法基础期中考试（答案）.pdf" target="_blank" rel="noopener">2023 答案</a>、<a href="./2023-2025期中考试试题及答案/2024 年秋季学期算法基础期中考试.pdf" target="_blank" rel="noopener">2024 年试题</a>、<a href="./2023-2025期中考试试题及答案/2024 年秋季学期算法基础期中考试（答案）.pdf" target="_blank" rel="noopener">2024 答案</a>、<a href="./2023-2025期中考试试题及答案/2025 年秋季学期算法基础期中考试.pdf" target="_blank" rel="noopener">2025 年试题</a>、<a href="./2023-2025期中考试试题及答案/2025 年秋季学期算法基础期中考试（答案）.pdf" target="_blank" rel="noopener">2025 答案</a>。</p>
+<p><strong>来源：</strong> <span class="file-ref" title="本地文件，未随站点发布">2023 年试题</span>、<span class="file-ref" title="本地文件，未随站点发布">2023 答案</span>、<span class="file-ref" title="本地文件，未随站点发布">2024 年试题</span>、<span class="file-ref" title="本地文件，未随站点发布">2024 答案</span>、<span class="file-ref" title="本地文件，未随站点发布">2025 年试题</span>、<span class="file-ref" title="本地文件，未随站点发布">2025 答案</span>。</p>
 <p>本章把三套真题拆成&quot;考点 + 真题 + 演示 + 易错点&quot;，与 <a href="#chapter-01">01</a>–<a href="#chapter-09">09</a> 的知识章节一一对应。原题请配合 PDF 看，本章负责讲清楚&quot;为什么这么答&quot;。</p>
 <p>想先看&quot;拿一个数组一步步走完&quot;的手算过程，直接跳到 <a href="#chapter-11">11 手算演练</a>：10 种排序、Quickselect、BST、AVL、红黑树（含删除）、Treap、顺序统计树、二项堆、并查集，每个都有完整数据和理由。</p>
 <h2 id="chapter-10-h1">1. 三套卷子的固定结构<a class="heading-anchor" href="#chapter-10-h1" aria-label="链接到本节">#</a></h2>
